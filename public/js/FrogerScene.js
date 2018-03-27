@@ -3,6 +3,8 @@ class FrogerScene extends Phaser.Scene {
 		super({
 			key: 'FrogerScene'
 		});
+		
+		this.bg;
 	}
 
 	init() {
@@ -24,11 +26,11 @@ class FrogerScene extends Phaser.Scene {
 		console.log("FROGER");
 		//this.scene.bringToTop();
 		// background
-		/*let bg = this.add.sprite(0, 0, 'background');
-		this.bg.setScale(0.5);*/
+		this.bg = this.add.sprite(0, 0, 'background');
+		//this.bg.setScale(0.5);
 
 		// change origin to the top-left of the sprite
-		//bg.setOrigin(0, 0);
+		this.bg.setOrigin(0, 0);
 
 		// player
 		this.player = this.add.sprite(40, this.sys.game.config.height / 2, 'player');

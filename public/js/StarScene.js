@@ -5,6 +5,7 @@ class StarScene extends Phaser.Scene {
 		});
 
 		this.stars;
+		this.bg;
 		this.bombs;
 		this.platforms;
 		this.cursors;
@@ -26,19 +27,25 @@ class StarScene extends Phaser.Scene {
 
 	create() {
 		//  A simple background for our game
-		this.add.image(400, 300, 'sky');
+		this.bg = this.add.image(0, 0, 'sky');
+		this.bg.setOrigin(0, 0);
 
 		//  The this.platforms group contains the ground and the 2 ledges we can jump on
 		this.platforms = this.physics.add.staticGroup();
 
 		//  Here we create the ground.
 		//  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-		this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+		this.platforms.create(640, 688, 'ground').setScale(2).refreshBody();
 
 		//  Now let's create some ledges
-		this.platforms.create(600, 400, 'ground');
+		
+		for(let i=0; i<10; i++)
+		{
+			this.platforms.create(600, 608-(i*96), 'ground');
+		}
+		/*this.platforms.create(600, 400, 'ground');
 		this.platforms.create(50, 250, 'ground');
-		this.platforms.create(750, 220, 'ground');
+		this.platforms.create(750, 220, 'ground');*/
 
 		// The player and its settings
 		this.player = this.physics.add.sprite(100, 450, 'dude');
