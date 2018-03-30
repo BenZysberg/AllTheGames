@@ -22,11 +22,15 @@ class PacManScene extends Phaser.Scene {
         this.current = Phaser.NONE;
         this.turning = Phaser.NONE;		
 	}
+	
+	/*init(){
+		Phaser.Physics.Arcade.Body.setGravity(0,0);
+	}*/
 
 	preload() {
 		this.load.image('dot', 'assets/dot.png');
 		this.load.image('tiles', 'assets/pacman-tiles.png');
-		this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
+		this.load.spritesheet('pacman', 'assets/pacman.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.tilemapTiledJSON('map', 'assets/pacman-map.json');
 
 		//  Needless to say, graphics (C)opyright Namco		
@@ -34,40 +38,52 @@ class PacManScene extends Phaser.Scene {
 
 	create() {
 		this.map = this.add.tilemap('map');
-		this.map.addTilesetImage('pacman-tiles', 'tiles');
+		this.tileset = this.map.addTilesetImage('pacman-tiles', 'tiles');
 
-		this.layer = this.map.createLayer('Pacman');
+		this.layer = this.map.createDynamicLayer('Pacman', this.tileset, 0, 0);
 
-		this.dots = this.add.physicsGroup();
+		//this.dots = this.physics.add.staticGroup();
 
-		this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
+		//this.dots = this.map.createFromTiles(7, this.safetile, 'dot', this, this.camera, this.layer);
 
 		//  The dots will need to be offset by 6px to put them back in the middle of the grid
-		this.dots.setAll('x', 6, false, false, 1);
-		this.dots.setAll('y', 6, false, false, 1);
+		//this.dots.setAll('x', 6, false, false, 1);
+		//this.dots.setAll('y', 6, false, false, 1);
 
 		//  Pacman should collide with everything except the safe tile
 		this.map.setCollisionByExclusion([this.safetile], true, this.layer);
 
 		//  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
-		this.pacman = this.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'pacman', 0);
-		this.pacman.anchor.set(0.5);
-		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+		this.pacman = this.physics.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'pacman', 0);
+		this.pacman.setOrigin(0.5,0.5);
+		
+		this.anims.create({
+			key: 'munch',
+			frames: this.anims.generateFrameNumbers('pacman', {
+				start: 0,
+				end: 3
+			}),
+			frameRate: 20,
+			repeat: -1
+		});		
 
-		this.physics.arcade.enable(this.pacman);
+		//this.physics.arcade.enable(this.pacman);
 		this.pacman.body.setSize(16, 16, 0, 0);
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 
 		this.pacman.play('munch');
 		this.move(Phaser.LEFT);		
+		
+		this.physics.add.collider(this.pacman, this.layer);
+		//this.physics.add.overlap(this.pacman, this.dots, this.eatDot, null, this);		
 	}
 
 	checkKeys() {
 
 		if (this.cursors.left.isDown && this.current !== Phaser.LEFT)
 		{
-			this.checkDirection(Phaser.LEFT);
+			this.checkDirection(Phaser.Input.Keyboard.LEFT);
 		}
 		else if (this.cursors.right.isDown && this.current !== Phaser.RIGHT)
 		{
@@ -91,12 +107,12 @@ class PacManScene extends Phaser.Scene {
 
 	checkDirection(turnTo) {
 
-		if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.safetile)
-		{
+		//if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.safetile)
+		//{
 			//  Invalid direction if they're already set to turn that way
 			//  Or there is no tile there, or the tile isn't index 1 (a floor tile)
-			return;
-		}
+			//return;
+		//}
 
 		//  Check if they want to turn around and can
 		if (this.current === this.opposites[turnTo])
@@ -119,7 +135,7 @@ class PacManScene extends Phaser.Scene {
 		var cy = Math.floor(this.pacman.y);
 
 		//  This needs a threshold, because at high speeds you can't turn because the coordinates skip past
-		if (!this.math.fuzzyEqual(cx, this.turnPoint.x, this.threshold) || !this.math.fuzzyEqual(cy, this.turnPoint.y, this.threshold))
+		if (!Phaser.Math.Fuzzy.Equal(cx, this.turnPoint.x, this.threshold) || !Phaser.Math.Fuzzy.Equal(cy, this.turnPoint.y, this.threshold))
 		{
 			return false;
 		}
@@ -157,12 +173,12 @@ class PacManScene extends Phaser.Scene {
 		}
 
 		//  Reset the scale and angle (Pacman is facing to the right in the sprite sheet)
-		this.pacman.scale.x = 1;
+		this.pacman.setScale(1);
 		this.pacman.angle = 0;
 
 		if (direction === Phaser.LEFT)
 		{
-			this.pacman.scale.x = -1;
+			this.pacman.setScale(-1);
 		}
 		else if (direction === Phaser.UP)
 		{
@@ -189,17 +205,14 @@ class PacManScene extends Phaser.Scene {
 	}
 	
 	update(time, delta) {
-		this.physics.arcade.collide(this.pacman, this.layer);
-		this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-
-		this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-		this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+		//this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
+		//this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
 
 		//  Update our grid sensors
-		this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
-		this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
-		this.directions[3] = this.map.getTileAbove(this.layer.index, this.marker.x, this.marker.y);
-		this.directions[4] = this.map.getTileBelow(this.layer.index, this.marker.x, this.marker.y);
+		//this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
+		//this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
+		//this.directions[3] = this.map.getTileAbove(this.layer.index, this.marker.x, this.marker.y);
+		//this.directions[4] = this.map.getTileBelow(this.layer.index, this.marker.x, this.marker.y);
 
 		this.checkKeys();
 
