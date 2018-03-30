@@ -10,13 +10,14 @@ class StarScene extends Phaser.Scene {
 		this.platforms;
 		this.cursors;
 		this.score = 0;
-		this.gameOver = false;
+		this.isPlayerAlive = true;
 		this.scoreText;
 	}
 
 	preload() {
 		this.load.image('sky', 'assets/sky.png');
-		this.load.image('ground', 'assets/platform.png');
+		this.load.image('ground', 'assets/ground.png');
+		this.load.image('platform', 'assets/platform.png');
 		this.load.image('star', 'assets/star.png');
 		this.load.image('bomb', 'assets/bomb.png');
 		this.load.spritesheet('dude', 'assets/dude.png', {
@@ -39,9 +40,9 @@ class StarScene extends Phaser.Scene {
 
 		//  Now let's create some ledges
 		
-		for(let i=0; i<10; i++)
+		for(let i=0; i<4; i++)
 		{
-			this.platforms.create(600, 608-(i*96), 'ground');
+			this.platforms.create(640+(Math.cos(Math.PI*i)*100), 608-(i*96), 'platform');
 		}
 		/*this.platforms.create(600, 400, 'ground');
 		this.platforms.create(50, 250, 'ground');
@@ -122,10 +123,14 @@ class StarScene extends Phaser.Scene {
 		this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
 
 		this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
+		
+		// player is alive
+		this.isPlayerAlive = true;
+		
 	}
 
 	update(time, delta) {
-		if (this.gameOver) {
+		if (!this.isPlayerAlive) {
 			return;
 		}
 
@@ -156,8 +161,10 @@ class StarScene extends Phaser.Scene {
 		this.scoreText.setText('this.score: ' + this.score);
 
 		if (this.stars.countActive(true) === 0) {
+
+			this.gameOver();
 			//  A new batch of this.stars to collect
-			this.stars.children.iterate(function(child) {
+			/*this.stars.children.iterate(function(child) {
 
 				child.enableBody(true, child.x, 0, true, true);
 
@@ -169,7 +176,7 @@ class StarScene extends Phaser.Scene {
 			bomb.setBounce(1);
 			bomb.setCollideWorldBounds(true);
 			bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-			bomb.allowGravity = false;
+			bomb.allowGravity = false;*/
 
 		}
 	}
@@ -181,7 +188,32 @@ class StarScene extends Phaser.Scene {
 
 		this.player.anims.play('turn');
 
-		this.gameOver = true;
+		this.isPlayerAlive = true;
 	}
+	
+	gameOver() {
+		// flag to set player is dead
+		this.isPlayerAlive = false;
+
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+		}, [], this);
+
+		// restart game
+		this.time.delayedCall(500, function() {
+			this.scene.stop('StarScene');
+			this.scene.start('FrogerScene');
+			//this.registry.set('restartScene', true);
+		}, [], this);
+
+		// reset camera effects
+		this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);
+	}	
 
 }

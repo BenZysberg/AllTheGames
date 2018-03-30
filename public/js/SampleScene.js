@@ -1,16 +1,13 @@
 class SampleScene extends Phaser.Scene {
-  constructor(test) {
-    super({
-      key: 'SampleScene'
-    });
-  }
+	constructor(test) {
+		super({
+			key: 'SampleScene'
+		});
+	}
 
-  preload() {
-  }
+	preload() {}
 
-  create() {
-  }
+	create() {}
 
-  update(time, delta) {
-  }
+	update(time, delta) {}
 }

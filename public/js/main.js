@@ -10,7 +10,7 @@ let config = {
 		default: 'arcade',
 		arcade: {
 			gravity: {
-				y: 800
+				y: 300
 			},
 			debug: false
 		}
@@ -18,8 +18,9 @@ let config = {
 	scene: [
 		BootScene,
 		TitleScene,
-		FrogerScene,
+		PacManScene,
 		StarScene,
+		FrogerScene,
 	]
 };
 
