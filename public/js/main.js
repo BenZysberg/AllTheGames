@@ -19,6 +19,7 @@ let config = {
 		BootScene,
 		TitleScene,
 		PacManScene,
+		SokobanScene,
 		StarScene,
 		FrogerScene,
 	]

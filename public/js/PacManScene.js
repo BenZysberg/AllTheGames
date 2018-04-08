@@ -17,10 +17,10 @@ class PacManScene extends Phaser.Scene {
         this.turnPoint = new  Phaser.Geom.Point();
 
         this.directions = [ null, null, null, null, null ];
-        this.opposites = [ Phaser.NONE, Phaser.RIGHT, Phaser.LEFT, Phaser.DOWN, Phaser.UP ];
+        this.opposites = [ Phaser.Input.Keyboard.KeyCodes.NONE, Phaser.Input.Keyboard.KeyCodes.RIGHT, Phaser.Input.Keyboard.KeyCodes.LEFT, Phaser.Input.Keyboard.KeyCodes.DOWN, Phaser.Input.Keyboard.KeyCodes.UP ];
 
-        this.current = Phaser.NONE;
-        this.turning = Phaser.NONE;		
+        this.current = Phaser.Input.Keyboard.KeyCodes.NONE;
+        this.turning = Phaser.Input.Keyboard.KeyCodes.NONE;		
 	}
 	
 	/*init(){
@@ -37,6 +37,7 @@ class PacManScene extends Phaser.Scene {
 	}
 
 	create() {
+		
 		this.map = this.add.tilemap('map');
 		this.tileset = this.map.addTilesetImage('pacman-tiles', 'tiles');
 
@@ -51,7 +52,7 @@ class PacManScene extends Phaser.Scene {
 		//this.dots.setAll('y', 6, false, false, 1);
 
 		//  Pacman should collide with everything except the safe tile
-		this.map.setCollisionByExclusion([this.safetile], true, this.layer);
+		this.map.setCollisionByExclusion([this.safetile], true, true, this.layer);
 
 		//  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
 		this.pacman = this.physics.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'pacman', 0);
@@ -73,7 +74,7 @@ class PacManScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 
 		this.pacman.play('munch');
-		this.move(Phaser.LEFT);		
+		//this.move(Phaser.LEFT);		
 		
 		this.physics.add.collider(this.pacman, this.layer);
 		//this.physics.add.overlap(this.pacman, this.dots, this.eatDot, null, this);		
@@ -81,39 +82,39 @@ class PacManScene extends Phaser.Scene {
 
 	checkKeys() {
 
-		if (this.cursors.left.isDown && this.current !== Phaser.LEFT)
+		if (this.cursors.left.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.LEFT)
 		{
-			this.checkDirection(Phaser.Input.Keyboard.LEFT);
+			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.LEFT);
 		}
-		else if (this.cursors.right.isDown && this.current !== Phaser.RIGHT)
+		else if (this.cursors.right.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.RIGHT)
 		{
-			this.checkDirection(Phaser.RIGHT);
+			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 		}
-		else if (this.cursors.up.isDown && this.current !== Phaser.UP)
+		else if (this.cursors.up.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.UP)
 		{
-			this.checkDirection(Phaser.UP);
+			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.UP);
 		}
-		else if (this.cursors.down.isDown && this.current !== Phaser.DOWN)
+		else if (this.cursors.down.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.DOWN)
 		{
-			this.checkDirection(Phaser.DOWN);
+			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.DOWN);
 		}
 		else
 		{
 			//  This forces them to hold the key down to turn the corner
-			this.turning = Phaser.NONE;
+			this.turning = Phaser.Input.Keyboard.KeyCodes.NONE;
 		}
 
 	}
 
 	checkDirection(turnTo) {
 
-		//if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.safetile)
-		//{
+		if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.safetile)
+		{
 			//  Invalid direction if they're already set to turn that way
 			//  Or there is no tile there, or the tile isn't index 1 (a floor tile)
-			//return;
-		//}
-
+			return;
+		}
+		
 		//  Check if they want to turn around and can
 		if (this.current === this.opposites[turnTo])
 		{
@@ -148,22 +149,24 @@ class PacManScene extends Phaser.Scene {
 
 		this.move(this.turning);
 
-		this.turning = Phaser.NONE;
+		this.turning = Phaser.Input.Keyboard.KeyCodes.NONE;
 
 		return true;
 
 	}
 
 	move(direction) {
+		
+		console.log(direction);
 
 		var speed = this.speed;
 
-		if (direction === Phaser.LEFT || direction === Phaser.UP)
+		if (direction === Phaser.Input.Keyboard.KeyCodes.LEFT || direction === Phaser.Input.Keyboard.KeyCodes.UP)
 		{
 			speed = -speed;
 		}
 
-		if (direction === Phaser.LEFT || direction === Phaser.RIGHT)
+		if (direction === Phaser.Input.Keyboard.KeyCodes.LEFT || direction === Phaser.Input.Keyboard.KeyCodes.RIGHT)
 		{
 			this.pacman.body.velocity.x = speed;
 		}
@@ -176,15 +179,15 @@ class PacManScene extends Phaser.Scene {
 		this.pacman.setScale(1);
 		this.pacman.angle = 0;
 
-		if (direction === Phaser.LEFT)
+		if (direction === Phaser.Input.Keyboard.KeyCodes.LEFT)
 		{
 			this.pacman.setScale(-1);
 		}
-		else if (direction === Phaser.UP)
+		else if (direction === Phaser.Input.Keyboard.KeyCodes.UP)
 		{
 			this.pacman.angle = 270;
 		}
-		else if (direction === Phaser.DOWN)
+		else if (direction === Phaser.Input.Keyboard.KeyCodes.DOWN)
 		{
 			this.pacman.angle = 90;
 		}
@@ -205,14 +208,15 @@ class PacManScene extends Phaser.Scene {
 	}
 	
 	update(time, delta) {
-		//this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-		//this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+		this.marker.x = Phaser.Math.Snap.To(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
+		this.marker.y = Phaser.Math.Snap.To(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+		console.log(this.marker.x+' '+this.marker.y);
 
 		//  Update our grid sensors
-		//this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
-		//this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
-		//this.directions[3] = this.map.getTileAbove(this.layer.index, this.marker.x, this.marker.y);
-		//this.directions[4] = this.map.getTileBelow(this.layer.index, this.marker.x, this.marker.y);
+		this.directions[1] = this.map.getTileAt(this.marker.x-1, this.marker.y);
+		this.directions[2] = this.map.getTileAt(this.marker.x+1, this.marker.y);
+		this.directions[3] = this.map.getTileAt(this.marker.x, this.marker.y-1);
+		this.directions[4] = this.map.getTileAt(this.marker.x, this.marker.y+1);
 
 		this.checkKeys();
 
