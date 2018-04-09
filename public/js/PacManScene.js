@@ -6,21 +6,25 @@ class PacManScene extends Phaser.Scene {
         this.map = null;
         this.layer = null;
         this.pacman = null;
-
+		this.none = 0;
+		this.left = 1;
+		this.right = 2;
+		this.up = 3;
+		this.down = 4;
         this.safetile = 14;
         this.gridsize = 16;
 
-        this.speed = 150;
+        this.speed = 50;
         this.threshold = 3;
 
         this.marker = new  Phaser.Geom.Point();
         this.turnPoint = new  Phaser.Geom.Point();
 
         this.directions = [ null, null, null, null, null ];
-        this.opposites = [ Phaser.Input.Keyboard.KeyCodes.NONE, Phaser.Input.Keyboard.KeyCodes.RIGHT, Phaser.Input.Keyboard.KeyCodes.LEFT, Phaser.Input.Keyboard.KeyCodes.DOWN, Phaser.Input.Keyboard.KeyCodes.UP ];
+        this.opposites = [ this.none, this.right, this.left, this.down, this.up ];
 
-        this.current = Phaser.Input.Keyboard.KeyCodes.NONE;
-        this.turning = Phaser.Input.Keyboard.KeyCodes.NONE;		
+        this.current = this.right;
+        this.turning = this.none;	
 	}
 	
 	/*init(){
@@ -30,14 +34,14 @@ class PacManScene extends Phaser.Scene {
 	preload() {
 		this.load.image('dot', 'assets/dot.png');
 		this.load.image('tiles', 'assets/pacman-tiles.png');
-		this.load.spritesheet('pacman', 'assets/pacman.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('pacman', 'assets/pacman.png', { frameWidth: 16, frameHeight: 16 });
 		this.load.tilemapTiledJSON('map', 'assets/pacman-map.json');
 
 		//  Needless to say, graphics (C)opyright Namco		
 	}
 
 	create() {
-		
+
 		this.map = this.add.tilemap('map');
 		this.tileset = this.map.addTilesetImage('pacman-tiles', 'tiles');
 
@@ -52,7 +56,8 @@ class PacManScene extends Phaser.Scene {
 		//this.dots.setAll('y', 6, false, false, 1);
 
 		//  Pacman should collide with everything except the safe tile
-		this.map.setCollisionByExclusion([this.safetile], true, true, this.layer);
+		//this.map.setCollisionByExclusion([this.safetile], true, true, this.layer);
+		this.map.setCollision([0,1,2,3,4,5,6,8,9,10,11,12,13,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33], true, true);
 
 		//  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
 		this.pacman = this.physics.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'pacman', 0);
@@ -74,41 +79,41 @@ class PacManScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 
 		this.pacman.play('munch');
-		//this.move(Phaser.LEFT);		
+		//this.move(this.right);		
 		
 		this.physics.add.collider(this.pacman, this.layer);
-		//this.physics.add.overlap(this.pacman, this.dots, this.eatDot, null, this);		
+		//this.physics.add.overlap(this.pacman, this.dots, this.eatDot, null, this);	
 	}
 
 	checkKeys() {
 
-		if (this.cursors.left.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.LEFT)
+		if (this.cursors.left.isDown && this.current !== this.left)
 		{
-			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.LEFT);
+			this.checkDirection(this.left);
 		}
-		else if (this.cursors.right.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.RIGHT)
+		else if (this.cursors.right.isDown && this.current !== this.right)
 		{
-			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+			this.checkDirection(this.right);
 		}
-		else if (this.cursors.up.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.UP)
+		else if (this.cursors.up.isDown && this.current !== this.up)
 		{
-			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.UP);
+			this.checkDirection(this.up);
 		}
-		else if (this.cursors.down.isDown && this.current !== Phaser.Input.Keyboard.KeyCodes.DOWN)
+		else if (this.cursors.down.isDown && this.current !== this.down)
 		{
-			this.checkDirection(Phaser.Input.Keyboard.KeyCodes.DOWN);
+			this.checkDirection(this.down);
 		}
 		else
 		{
 			//  This forces them to hold the key down to turn the corner
-			this.turning = Phaser.Input.Keyboard.KeyCodes.NONE;
+			this.turning = this.none;
 		}
 
 	}
 
 	checkDirection(turnTo) {
 
-		if (this.turning === turnTo || this.directions[turnTo] === null || this.directions[turnTo].index !== this.safetile)
+		if (this.turning === turnTo || this.directions[turnTo] === null )//|| this.directions[turnTo].index !== this.safetile)
 		{
 			//  Invalid direction if they're already set to turn that way
 			//  Or there is no tile there, or the tile isn't index 1 (a floor tile)
@@ -149,24 +154,22 @@ class PacManScene extends Phaser.Scene {
 
 		this.move(this.turning);
 
-		this.turning = Phaser.Input.Keyboard.KeyCodes.NONE;
+		this.turning = this.none;
 
 		return true;
 
 	}
 
 	move(direction) {
-		
-		console.log(direction);
 
 		var speed = this.speed;
 
-		if (direction === Phaser.Input.Keyboard.KeyCodes.LEFT || direction === Phaser.Input.Keyboard.KeyCodes.UP)
+		if (direction === this.left || direction === this.up)
 		{
 			speed = -speed;
 		}
 
-		if (direction === Phaser.Input.Keyboard.KeyCodes.LEFT || direction === Phaser.Input.Keyboard.KeyCodes.RIGHT)
+		if (direction === this.left || direction === this.right)
 		{
 			this.pacman.body.velocity.x = speed;
 		}
@@ -179,15 +182,15 @@ class PacManScene extends Phaser.Scene {
 		this.pacman.setScale(1);
 		this.pacman.angle = 0;
 
-		if (direction === Phaser.Input.Keyboard.KeyCodes.LEFT)
+		if (direction === this.left )
 		{
 			this.pacman.setScale(-1);
 		}
-		else if (direction === Phaser.Input.Keyboard.KeyCodes.UP)
+		else if (direction === this.up)
 		{
 			this.pacman.angle = 270;
 		}
-		else if (direction === Phaser.Input.Keyboard.KeyCodes.DOWN)
+		else if (direction === this.down)
 		{
 			this.pacman.angle = 90;
 		}
@@ -208,21 +211,27 @@ class PacManScene extends Phaser.Scene {
 	}
 	
 	update(time, delta) {
-		this.marker.x = Phaser.Math.Snap.To(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
-		this.marker.y = Phaser.Math.Snap.To(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-		console.log(this.marker.x+' '+this.marker.y);
+		this.marker.x = Phaser.Math.Snap.Floor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
+		this.marker.y = Phaser.Math.Snap.Floor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
 
 		//  Update our grid sensors
-		this.directions[1] = this.map.getTileAt(this.marker.x-1, this.marker.y);
-		this.directions[2] = this.map.getTileAt(this.marker.x+1, this.marker.y);
-		this.directions[3] = this.map.getTileAt(this.marker.x, this.marker.y-1);
-		this.directions[4] = this.map.getTileAt(this.marker.x, this.marker.y+1);
+		this.directions[this.left] = this.map.getTileAt(this.marker.x-1, this.marker.y);
+		this.directions[this.right] = this.map.getTileAt(this.marker.x+1, this.marker.y);
+		this.directions[this.up] = this.map.getTileAt(this.marker.x, this.marker.y-1);
+		this.directions[this.down] = this.map.getTileAt(this.marker.x, this.marker.y+1);
 
+		console.log(this.directions[this.left].index);
+		/*if(this.directions[this.left].index != 13)
+		{
+			this.pacman.body.velocity.x = 0;
+			
+		}*/
+		
 		this.checkKeys();
 
-		if (this.turning !== Phaser.NONE)
+		if (this.turning !== this.none)
 		{
 			this.turn();
 		}		
-	}
+	}	
 }
