@@ -6,18 +6,23 @@ let config = {
 	scaleMode: 0, //Phaser.ScaleManager.EXACT_FIT,
 	pixelart: true,
 	zoom: document.body.clientWidth / 1280,
-	physics: {
-		default: 'arcade',
+	/*physics: {
+		matter: {
+			//debug: true,
+			gravity: { y: 0.5 }
+		},
 		arcade: {
 			gravity: {
-				//y: 300
+				y: 300
 			},
-			debug: false
-		}
-	},
+			//debug: true
+		},
+	},*/
 	scene: [
 		BootScene,
 		TitleScene,
+		BreakoutScene,
+		PlaneScene,
 		PacManScene,
 		SokobanScene,
 		StarScene,

@@ -1,7 +1,15 @@
 class StarScene extends Phaser.Scene {
-	constructor(test) {
+	constructor() {
 		super({
-			key: 'StarScene'
+			key: 'StarScene',
+			physics: {
+				arcade: {
+					gravity: {
+						y: 300
+					},
+					//debug: true
+				},
+			}			
 		});
 
 		this.stars;
@@ -21,7 +29,7 @@ class StarScene extends Phaser.Scene {
 		this.load.image('star', 'assets/star.png');
 		this.load.image('bomb', 'assets/bomb.png');
 		this.load.spritesheet('dude', 'assets/dude.png', {
-			frameWidth: 32,
+			frameWidth: 36,
 			frameHeight: 48
 		});
 	}

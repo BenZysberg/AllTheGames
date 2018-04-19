@@ -1,7 +1,15 @@
 class PacManScene extends Phaser.Scene {
-	constructor(test) {
+	constructor() {
 		super({
-			key: 'PacManScene'
+			key: 'PacManScene',
+			physics: {
+				arcade: {
+					gravity: {
+						y: 0
+					},
+					debug: true
+				},
+			}			
 		});
         this.map = null;
         this.layer = null;
@@ -35,6 +43,7 @@ class PacManScene extends Phaser.Scene {
 		this.load.image('dot', 'assets/dot.png');
 		this.load.image('tiles', 'assets/pacman-tiles.png');
 		this.load.spritesheet('pacman', 'assets/pacman.png', { frameWidth: 16, frameHeight: 16 });
+		//this.load.spritesheet('pacman', 'assets/PacWoman.png', { frameWidth: 128, frameHeight: 128 });
 		this.load.tilemapTiledJSON('map', 'assets/pacman-map.json');
 
 		//  Needless to say, graphics (C)opyright Namco		
@@ -69,7 +78,7 @@ class PacManScene extends Phaser.Scene {
 				start: 0,
 				end: 3
 			}),
-			frameRate: 20,
+			frameRate: 15,
 			repeat: -1
 		});		
 
@@ -184,7 +193,7 @@ class PacManScene extends Phaser.Scene {
 
 		if (direction === this.left )
 		{
-			this.pacman.setScale(-1);
+			this.pacman.angle = 180;
 		}
 		else if (direction === this.up)
 		{
@@ -220,7 +229,7 @@ class PacManScene extends Phaser.Scene {
 		this.directions[this.up] = this.map.getTileAt(this.marker.x, this.marker.y-1);
 		this.directions[this.down] = this.map.getTileAt(this.marker.x, this.marker.y+1);
 
-		console.log(this.directions[this.left].index);
+		//console.log(this.directions[this.left].index);
 		/*if(this.directions[this.left].index != 13)
 		{
 			this.pacman.body.velocity.x = 0;
