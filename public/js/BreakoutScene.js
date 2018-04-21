@@ -19,6 +19,7 @@ class BreakoutScene extends Phaser.Scene {
     preload()
     {
         this.load.atlas('assets', 'assets/breakout.png', 'assets/breakout.json');
+		this.count = 2;
     }
 
     create()
@@ -30,7 +31,8 @@ class BreakoutScene extends Phaser.Scene {
         this.bricks = this.physics.add.staticGroup({
             key: 'assets', frame: [ 'blue1', 'red1', 'green1', 'yellow1', 'silver1', 'purple1' ],
             frameQuantity: 10,
-            gridAlign: { width: 10, height: 6, cellWidth: 64, cellHeight: 32, x: 112, y: 100 }
+            //gridAlign: { width: 10, height: 6, cellWidth: 64, cellHeight: 32, x: 112, y: 100 }
+            gridAlign: { width: 2, height: 1, cellWidth: 64, cellHeight: 32, x: 112, y: 100 }
         });
 
         this.ball = this.physics.add.image(400, 500, 'assets', 'ball1').setCollideWorldBounds(true).setBounce(1);
@@ -69,12 +71,36 @@ class BreakoutScene extends Phaser.Scene {
     hitBrick(ball, brick)
     {
         brick.disableBody(true, true);
-
-        if (this.bricks.countActive() === 0)
+		this.count--;
+        if (this.count === 0)
         {
-            this.resetLevel();
+            this.gameOver();
         }
     }
+
+	gameOver() {
+		// flag to set player is dead
+		//this.isPlayerAlive = false;
+
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+		}, [], this);
+
+		// restart game
+		this.time.delayedCall(500, function() {
+			this.scene.switch('CrateScene');
+			//this.registry.set('restartScene', true);
+		}, [], this);
+
+		// reset camera effects
+		this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);
+	}	
 
     resetBall()
     {

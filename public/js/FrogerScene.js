@@ -122,8 +122,7 @@ class FrogerScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.stop('FrogerScene');
-			this.scene.start('StarScene');
+			this.scene.switch('StarScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 

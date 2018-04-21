@@ -213,8 +213,8 @@ class StarScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.stop('StarScene');
-			this.scene.start('FrogerScene');
+			//this.scene.stop('StarScene');
+			this.scene.switch('SokobanScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 

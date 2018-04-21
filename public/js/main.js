@@ -21,12 +21,14 @@ let config = {
 	scene: [
 		BootScene,
 		TitleScene,
-		BreakoutScene,
-		PlaneScene,
-		PacManScene,
-		SokobanScene,
-		StarScene,
-		FrogerScene,
+		BreakoutScene, //THURSDAY : SQUASH BUGS (Space invaders ?)
+		PlaneScene,  //TUESDAY : GET TO THE BLUE CONFERENCE ROOM
+		PacManScene, //WEDNESDAY : DRIVE DESTINY TO SCHOOL 
+		SokobanScene, //FRIDAY : PUSH CODE
+		StarScene, //SUNDAY : KIMCHI TIME
+		FrogerScene, //SATURDAY : QUIT SMOKING
+		CrateScene, //MONDAY : AVOID YOUTUBE POLITICAL VIDEOS
+		MarioScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 	]
 };
 

@@ -1,5 +1,5 @@
 class SampleScene extends Phaser.Scene {
-	constructor(test) {
+	constructor() {
 		super({
 			key: 'SampleScene'
 		});

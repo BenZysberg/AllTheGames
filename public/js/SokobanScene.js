@@ -1,40 +1,37 @@
-var gameOptions = {
-    tileSize: 40,
-    gameWidth: 320,
-    gameHeight: 320,
-    gameSpeed: 100
-}
-
-var level = [
-    [1,1,1,1,1,1,1,1],
-    [1,0,0,1,1,1,1,1],
-    [1,0,0,1,1,1,1,1],
-    [1,0,0,0,0,0,0,1],
-    [1,1,4,2,1,3,0,1],
-    [1,0,0,0,1,0,0,1],
-    [1,0,0,0,1,1,1,1],
-    [1,1,1,1,1,1,1,1]
-];
-
-var EMPTY = 0;
-var WALL = 1;
-var SPOT = 2;
-var CRATE = 3;
-var PLAYER = 4;
-
 class SokobanScene extends Phaser.Scene {
-	constructor(test) {
+	constructor() {
 		super({
 			key: 'SokobanScene'
 		});	
 		this.current = Phaser.NONE;
+		this.EMPTY = 0;
+		this.WALL = 1;
+		this.SPOT = 2;
+		this.CRATE = 3;
+		this.PLAYERSPOT = 4;	
+		this.level = [
+			[1,1,1,1,1,1,1,1],
+			[1,0,0,1,1,1,1,1],
+			[1,0,0,1,1,1,1,1],
+			[1,0,0,0,0,0,0,1],
+			[1,1,4,2,1,3,0,1],
+			[1,0,0,0,1,0,0,1],
+			[1,0,0,0,1,1,1,1],
+			[1,1,1,1,1,1,1,1]
+		];
+		this.gameOptions = {
+			tileSize: 80,
+			gameWidth: 320,
+			gameHeight: 320,
+			gameSpeed: 100
+		}		
 	}
 
 	preload() {
 		console.log("CAR");		
         this.load.spritesheet("tiles", "assets/sokotiles.png", {
-            frameWidth: gameOptions.tileSize,
-            frameHeight: gameOptions.tileSize
+            frameWidth: this.gameOptions.tileSize,
+            frameHeight: this.gameOptions.tileSize
         });		
 	}
 
@@ -54,32 +51,32 @@ class SokobanScene extends Phaser.Scene {
 	
     drawLevel(){
         this.crates.length = 0;
-        for(var i = 0; i < level.length; i++){
+        for(var i = 0; i < this.level.length; i++){
             this.crates[i] = [];
-            for(var j = 0; j < level[i].length; j++){
+            for(var j = 0; j < this.level[i].length; j++){
                 this.crates[i][j] = null;
-                switch(level[i][j]){
-                    case PLAYER:
-                    case PLAYER + SPOT:
-                        this.player = this.add.sprite(gameOptions.tileSize * j, gameOptions.tileSize * i, "tiles", level[i][j]);
+                switch(this.level[i][j]){
+                    case this.PLAYERSPOT:
+                    case this.PLAYERSPOT + this.SPOT:
+                        this.player = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j]);
                         this.player.posX = j;
                         this.player.posY = i;
                         this.player.depth = 1
                         this.player.setOrigin(0);
-                        var tile = this.add.sprite(gameOptions.tileSize * j, gameOptions.tileSize * i, "tiles", level[i][j] - PLAYER);
+                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j] - this.PLAYERSPOT);
                         tile.setOrigin(0);
                         tile.depth = 0;
                         break;
-                    case CRATE:
-                    case CRATE + SPOT:
-                        this.crates[i][j] = this.add.sprite(gameOptions.tileSize * j, gameOptions.tileSize * i, "tiles", level[i][j]);
+                    case this.CRATE:
+                    case this.CRATE + this.SPOT:
+                        this.crates[i][j] = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j]);
                         this.crates[i][j].setOrigin(0);
                         this.crates[i][j].depth = 1
-                        var tile = this.add.sprite(gameOptions.tileSize * j, gameOptions.tileSize * i, "tiles", level[i][j] - CRATE);
+                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j] - this.CRATE);
                         tile.setOrigin(0);
                         break;
                     default:
-                        var tile = this.add.sprite(gameOptions.tileSize * j, gameOptions.tileSize * i, "tiles", level[i][j]);
+                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j]);
                         tile.setOrigin(0);
                 }
             }
@@ -122,48 +119,76 @@ class SokobanScene extends Phaser.Scene {
     }
 	
     isWalkable(posX, posY){
-       return level[posY][posX] == EMPTY || level[posY][posX] == SPOT;
+       return this.level[posY][posX] == this.EMPTY || this.level[posY][posX] == this.SPOT;
     }
 	
     isCrate(posX, posY){
-        return level[posY][posX] == CRATE || level[posY][posX] == CRATE + SPOT;
+        return this.level[posY][posX] == this.CRATE || this.level[posY][posX] == this.CRATE + this.SPOT;
     }
 	
     movePlayer(deltaX, deltaY){
         var playerTween = this.tweens.add({
             targets: this.player,
-            x: this.player.x + deltaX * gameOptions.tileSize,
-            y: this.player.y + deltaY * gameOptions.tileSize,
-            duration: gameOptions.gameSpeed,
-            onComplete: function(tween, target, player){
+            x: this.player.x + deltaX * this.gameOptions.tileSize,
+            y: this.player.y + deltaY * this.gameOptions.tileSize,
+            duration: this.gameOptions.gameSpeed,
+            onComplete: function(tween, target, player,level){
                 player.setFrame(level[player.posY][player.posX]);
             },
-            onCompleteParams: [this.player]
+            onCompleteParams: [this.player,this.level]
         });
-        level[this.player.posY][this.player.posX] -= PLAYER;
+        this.level[this.player.posY][this.player.posX] -= this.PLAYERSPOT;
         this.player.posX += deltaX;
         this.player.posY += deltaY;
-        level[this.player.posY][this.player.posX] += PLAYER;
+        this.level[this.player.posY][this.player.posX] += this.PLAYERSPOT;
 	}
+	
+	gameOver() {
+		// flag to set player is dead
+		//this.isPlayerAlive = false;
+
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+		}, [], this);
+
+		// restart game
+		this.time.delayedCall(500, function() {
+			this.scene.switch('BreakoutScene');
+			//this.registry.set('restartScene', true);
+		}, [], this);
+
+		// reset camera effects
+		this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);
+	}		
 	
     moveCrate(deltaX, deltaY){
 	    var crateTween = this.tweens.add({
             targets: this.crates[this.player.posY + deltaY][this.player.posX + deltaX],
-            x: this.crates[this.player.posY + deltaY][this.player.posX + deltaX].x + deltaX * gameOptions.tileSize,
-            y: this.crates[this.player.posY + deltaY][this.player.posX + deltaX].y + deltaY * gameOptions.tileSize,
-            duration: gameOptions.gameSpeed,
-            onComplete: function(tween, target, crate, player){
+            x: this.crates[this.player.posY + deltaY][this.player.posX + deltaX].x + deltaX * this.gameOptions.tileSize,
+            y: this.crates[this.player.posY + deltaY][this.player.posX + deltaX].y + deltaY * this.gameOptions.tileSize,
+            duration: this.gameOptions.gameSpeed,
+            onComplete: function(tween, target, crate, player,level){
                 crate.setFrame(level[player.posY + deltaY][player.posX + deltaX]);
             },
-            onCompleteParams: [this.crates[this.player.posY + deltaY][this.player.posX + deltaX], this.player]
+            onCompleteParams: [this.crates[this.player.posY + deltaY][this.player.posX + deltaX], this.player, this.level]
         })
 	    this.crates[this.player.posY + 2 * deltaY][this.player.posX + 2 * deltaX] = this.crates[this.player.posY + deltaY][this.player.posX + deltaX];
         this.crates[this.player.posY + deltaY][this.player.posX + deltaX] = null;
-        level[this.player.posY + deltaY][this.player.posX + deltaX] -= CRATE;
-        level[this.player.posY + 2 * deltaY][this.player.posX + 2 * deltaX] += CRATE;
+        this.level[this.player.posY + deltaY][this.player.posX + deltaX] -= this.CRATE;
+        this.level[this.player.posY + 2 * deltaY][this.player.posX + 2 * deltaX] += this.CRATE;
+		if(this.level[this.player.posY + 2 * deltaY][this.player.posX + 2 * deltaX] == (this.CRATE+this.SPOT))
+			this.gameOver();
 	}	
+	
 
 	update(time, delta) {
+		
 		
 	
 		if (!this.bLeftKeyDown)
