@@ -33,3 +33,5 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
+
+//More ideas : choose the right door for the meeting (VIP, BCR, DCR) and Mazi is behind one of those
