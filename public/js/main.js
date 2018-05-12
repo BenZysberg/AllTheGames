@@ -5,7 +5,7 @@ let config = {
 	height: 720,
 	scaleMode: 0, //Phaser.ScaleManager.EXACT_FIT,
 	pixelart: true,
-	zoom: document.body.clientWidth / 1280,
+	zoom: window.screen.availWidth / 1280,
 	/*physics: {
 		matter: {
 			//debug: true,
@@ -34,4 +34,4 @@ let config = {
 
 let game = new Phaser.Game(config);
 
-//More ideas : choose the right door for the meeting (VIP, BCR, DCR) and Mazi is behind one of those
+//More ideas : choose the right door for the meeting (VIP, BCR, DCR) and Mazi is behind one of those src\scenes\ui%20scene%20es6.js

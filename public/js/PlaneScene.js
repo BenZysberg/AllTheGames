@@ -1,5 +1,5 @@
 class PlaneScene extends Phaser.Scene {
-	constructor(test) {
+	constructor() {
 		super({
 			key: 'PlaneScene',
 			physics: {
@@ -7,16 +7,20 @@ class PlaneScene extends Phaser.Scene {
 					gravity: {
 						y: 300
 					},
-					//debug: true
+					debug: true
 				},
 			}			
 		});
 		this.cursors;
-		this.isPlayerAlive = true;		
+		this.isPlayerAlive = true;	
 	}
 	
 	preload() {
-        this.load.atlas('sheet', 'assets/sheet.png', 'assets/sheet.json');
+		this.load.spritesheet('plane', 'assets/plane.png', {
+			frameWidth: 90,
+			frameHeight: 73
+		});
+		this.load.image('flappyBg', 'assets/stars.jpg');
     }
 	
 	resize() {
@@ -38,16 +42,21 @@ class PlaneScene extends Phaser.Scene {
         //this.resize();
 
         this.anims.create({
-            key: 'plane',
+            key: 'fly',
             repeat: -1,
             frameRate: 10,
-            frames: this.anims.generateFrameNames('sheet', { start: 1,  end: 3, prefix: 'planeBlue', suffix: '.png' })
+            frames: this.anims.generateFrameNames('plane', { start: 0,  end: 2})
         });
 		
 		this.cursors = this.input.keyboard.createCursorKeys();
 
-        this.bg = this.add.tileSprite(0, 0, 800, 480, 'sheet', 'background.png').setOrigin(0);
-        this.plane = this.physics.add.sprite(400, 300, 'sheet').play('plane');
+        this.bg = this.add.tileSprite(0, 0, 1920, 1080, 'flappyBg').setOrigin(0);
+		this.bg.setOrigin(0);
+		//this.bg.setScale(2);
+        this.plane = this.physics.add.sprite(400, 300, 'sheet');
+		this.plane.body.setSize(90,73,45,0);
+        this.plane.play('fly');
+		this.plane.setCollideWorldBounds(true);
     }
 
 	update(time, delta) {
@@ -55,20 +64,6 @@ class PlaneScene extends Phaser.Scene {
 		
 		if (!this.isPlayerAlive) {
 			return;
-		}
-
-		if (this.cursors.left.isDown) {
-			this.plane.setVelocityX(-160);
-
-			this.plane.anims.play('left', true);
-		} else if (this.cursors.right.isDown) {
-			this.plane.setVelocityX(160);
-
-			this.plane.anims.play('right', true);
-		} else {
-			this.plane.setVelocityX(0);
-
-			this.plane.anims.play('turn');
 		}
 
 		if (this.cursors.up.isDown) {

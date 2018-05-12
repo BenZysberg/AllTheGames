@@ -14,7 +14,7 @@ class TitleScene extends Phaser.Scene {
 		if (this.startKey.isDown) {
 			//this.scene.stop('TitleScene');
 			//this.registry.set('attractMode', false);
-			this.scene.switch('FrogerScene');
+			this.scene.switch('PacManScene');
 		}
 	}
 }
