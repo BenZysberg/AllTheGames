@@ -1,23 +1,11 @@
 let config = {
 	type: Phaser.WEBGL,
 	parent: 'content',
-	width: 1280,
-	height: 720,
-	scaleMode: 0, //Phaser.ScaleManager.EXACT_FIT,
+	width: 900, //1280
+	height: 1334, //720
+	/*scaleMode: 0,
 	pixelart: true,
-	zoom: window.screen.availWidth / 1280,
-	/*physics: {
-		matter: {
-			//debug: true,
-			gravity: { y: 0.5 }
-		},
-		arcade: {
-			gravity: {
-				y: 300
-			},
-			//debug: true
-		},
-	},*/
+	zoom: document.body.clientWidth / 1280,*/
 	scene: [
 		BootScene,
 		TitleScene,
@@ -29,9 +17,31 @@ let config = {
 		FrogerScene, //SATURDAY : QUIT SMOKING
 		CrateScene, //MONDAY : AVOID YOUTUBE POLITICAL VIDEOS OR WEBEX MEETINGSs
 		MarioScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
+		KnifeScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
+		ThreesScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 	]
 };
 
 let game = new Phaser.Game(config);
 
-//More ideas : choose the right door for the meeting (VIP, BCR, DCR) and Mazi is behind one of those src\scenes\ui%20scene%20es6.js
+window.focus()
+resize();
+window.addEventListener("resize", resize, false);
+
+function resize() {
+    var canvas = document.querySelector("canvas");
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+    var windowRatio = windowWidth / windowHeight;
+    var gameRatio = game.config.width / game.config.height;
+    if(windowRatio < gameRatio){
+        canvas.style.width = windowWidth + "px";
+        canvas.style.height = (windowWidth / gameRatio) + "px";
+    }
+    else{
+        canvas.style.width = (windowHeight * gameRatio) + "px";
+        canvas.style.height = windowHeight + "px";
+    }
+}
+
+//More ideas : choose the right door for the meeting (VIP, BCR, DCR) and Mazi is behind one of those
