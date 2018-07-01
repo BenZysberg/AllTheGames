@@ -1,21 +1,21 @@
 let config = {
 	type: Phaser.WEBGL,
 	parent: 'content',
-	width: 900, //1280
-	height: 1334, //720
-	/*scaleMode: 0,
+	width: 1280, //1280
+	height: 720, //720
+	scaleMode: 0,
 	pixelart: true,
-	zoom: document.body.clientWidth / 1280,*/
+	zoom: document.body.clientWidth / 1280,
 	scene: [
 		BootScene,
 		TitleScene,
-		BreakoutScene, //THURSDAY : SQUASH BUGS (Space invaders ?)
-		PlaneScene,  //TUESDAY : GET TO THE BLUE CONFERENCE ROOM
+		BreakoutScene, //FIX THE CSS
+		PlaneScene,  //LEAVE THE BUILDING
 		PacManScene, //WEDNESDAY : DRIVE DESTINY TO SCHOOL 
 		SokobanScene, //FRIDAY : PUSH CODE
-		StarScene, //SUNDAY : KIMCHI TIME
-		FrogerScene, //SATURDAY : QUIT SMOKING
-		CrateScene, //MONDAY : AVOID YOUTUBE POLITICAL VIDEOS OR WEBEX MEETINGSs
+		StarScene, //EAT THE RICE
+		FrogerScene, //HEAD OUT!!
+		CrateScene, //DON'T SMOKE!!
 		MarioScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 		KnifeScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 		ThreesScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
@@ -25,8 +25,8 @@ let config = {
 let game = new Phaser.Game(config);
 
 window.focus()
-resize();
-window.addEventListener("resize", resize, false);
+/*resize();
+window.addEventListener("resize", resize, false);*/
 
 function resize() {
     var canvas = document.querySelector("canvas");

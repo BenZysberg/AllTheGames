@@ -1,29 +1,43 @@
 class FrogerScene extends Phaser.Scene {
 	constructor(test) {
 		super({
-			key: 'FrogerScene'
-		});
-		
-		this.bg;
+			key: 'FrogerScene',
+			physics: {
+				arcade: {
+					gravity: {
+						y: 0
+					},
+					debug: false
+				},
+			}	
+		});		
 	}
 
 	init() {
-		this.playerSpeed = 1.5;
+		this.playerSpeed = 100;
 		this.enemySpeed = 8;
 		this.enemyMaxY = 640;
 		this.enemyMinY = 80;
 	}
 
 	preload() {
-		this.load.image('background', 'assets/background.png');
+		this.load.image('background', 'assets/vip.jpg');
 		this.load.image('player', 'assets/player.png');
-		this.load.image('dragon', 'assets/dragon.png');
-		this.load.image('treasure', 'assets/treasure.png');
+		this.load.image('dragon', 'assets/MaziarFarzam.png');
+		this.load.image('treasure', 'assets/Door.jpg');
 	}
 
 	create() {
 
-		console.log("FROGER");
+        this.input.on("pointerup", this.endSwipe, this);			
+		this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);	
+		this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);		
+		this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);		
+		this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+		this.bLeftKeyDown = false;
+		this.bRightKeyDown = false;
+		this.bUpKeyDown = false;
+		this.bDownKeyDown = false;	
 		//this.scene.bringToTop();
 		// background
 		this.bg = this.add.sprite(0, 0, 'background');
@@ -33,23 +47,23 @@ class FrogerScene extends Phaser.Scene {
 		this.bg.setOrigin(0, 0);
 
 		// player
-		this.player = this.add.sprite(40, this.sys.game.config.height / 2, 'player');
+		this.player = this.physics.add.sprite(60, this.sys.game.config.height / 2, 'player');
 
 		// scale down
 		this.player.setScale(0.5);
 
 		// goal
-		this.treasure = this.add.sprite(this.sys.game.config.width - 80, this.sys.game.config.height / 2, 'treasure');
+		this.treasure = this.physics.add.sprite(this.sys.game.config.width - 80, this.sys.game.config.height / 2, 'treasure');
 		this.treasure.setScale(0.6);
 
 		// group of enemies
-		this.enemies = this.add.group({
+		this.enemies = this.physics.add.group({
 			key: 'dragon',
 			repeat: 10,
 			setXY: {
 				x: 110,
 				y: this.sys.game.config.height / 2,
-				stepX: 80,
+				stepX: 100,
 				stepY: 20
 			}
 		});
@@ -64,19 +78,86 @@ class FrogerScene extends Phaser.Scene {
 
 		// player is alive
 		this.isPlayerAlive = true;
+		
+		this.cursors = this.input.keyboard.createCursorKeys();
 	}
+	
+	endSwipe(e) {
+
+    }	
 
 	update(time, delta) {
 		// only if the player is alive
 		if (!this.isPlayerAlive) {
 			return;
 		}
+		
+		if (!this.bLeftKeyDown)
+		{
+			if(this.leftKey.isDown)
+			{ 
+				this.bLeftKeyDown = true;
+				this.player.x -= this.playerSpeed;
+			}			
+		}
+		else
+		{
+			if(this.leftKey.isUp)
+			{ 
+				this.bLeftKeyDown = false;
+			}
+		}
+		
+		
+		
+		if (!this.bRightKeyDown)
+		{
+			if(this.rightKey.isDown)
+			{ 
+				this.bRightKeyDown = true;
+				this.player.x += this.playerSpeed;
+			}			
+		}
+		else
+		{
+			if(this.rightKey.isUp)
+			{ 
+				this.bRightKeyDown = false;
+			}
+		}
+		
+		
+		if (!this.bUpKeyDown)
+		{
+			if(this.upKey.isDown)
+			{ 
+				this.bUpKeyDown = true;
+				this.player.y -= this.playerSpeed;
+			}			
+		}
+		else
+		{
+			if(this.upKey.isUp)
+			{ 
+				this.bUpKeyDown = false;
+			}
+		}	
 
-		// check for active input
-		if (this.input.activePointer.isDown) {
 
-			// player walks
-			this.player.x += this.playerSpeed;
+		if (!this.bDownKeyDown)
+		{
+			if(this.downKey.isDown)
+			{ 
+				this.bDownKeyDown = true;
+				this.player.y += this.playerSpeed;
+			}			
+		}
+		else
+		{
+			if(this.downKey.isUp)
+			{ 
+				this.bDownKeyDown = false;
+			}
 		}
 
 		// treasure collision

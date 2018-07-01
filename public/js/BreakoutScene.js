@@ -19,11 +19,17 @@ class BreakoutScene extends Phaser.Scene {
     preload()
     {
         this.load.atlas('assets', 'assets/breakout.png', 'assets/breakout.json');
-		this.count = 2;
+		this.count = 10;
+		
+		this.load.image('background', 'assets/Sublime.png');
     }
 
     create()
     {
+		
+		this.bg = this.add.sprite(0, 0, 'background');
+		this.bg.setOrigin(0, 0);
+		
         //  Enable world bounds, but disable the floor
         this.physics.world.setBoundsCollision(true, true, true, false);
 
@@ -31,8 +37,7 @@ class BreakoutScene extends Phaser.Scene {
         this.bricks = this.physics.add.staticGroup({
             key: 'assets', frame: [ 'blue1', 'red1', 'green1', 'yellow1', 'silver1', 'purple1' ],
             frameQuantity: 10,
-            //gridAlign: { width: 10, height: 6, cellWidth: 64, cellHeight: 32, x: 112, y: 100 }
-            gridAlign: { width: 2, height: 1, cellWidth: 64, cellHeight: 32, x: 112, y: 100 }
+            gridAlign: { width: 15, height: 6, cellWidth: 64, cellHeight: 32, x: 180, y: 100 }
         });
 
         this.ball = this.physics.add.image(400, 500, 'assets', 'ball1').setCollideWorldBounds(true).setBounce(1);
@@ -48,7 +53,7 @@ class BreakoutScene extends Phaser.Scene {
         this.input.on('pointermove', function (pointer) {
 
             //  Keep the paddle within the game
-            this.paddle.x = Phaser.Math.Clamp(pointer.x, 52, 748);
+            this.paddle.x = Phaser.Math.Clamp(pointer.x, 100, 1180);
 
             if (this.ball.getData('onPaddle'))
             {

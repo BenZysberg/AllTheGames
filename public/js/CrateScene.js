@@ -17,6 +17,10 @@ class CrateScene extends Phaser.Scene {
 		});	
 		this.cursors;
 		this.isPlayerAlive = true;
+		this.scoreText;
+		this.newCrateTime = 0;
+		this.newDifficultyTime = 0;
+		this.timing = 1125;
 	}
 
 	init(){
@@ -28,16 +32,28 @@ class CrateScene extends Phaser.Scene {
     preload(){
 
         // loading crate image
-        this.load.image("crate", "assets/crate.png");
+        this.load.image("crate", "assets/Camel.jpg");
 		this.load.spritesheet('dude', 'assets/dude.png', {
 			frameWidth: 36,
 			frameHeight: 48
-		});		
+		});
+		this.load.image('background', 'assets/CafeBleu.jpg');			
     }
 
     // function to be executed once the scene has been created
     create(){
 
+	
+		//  A simple background for our game
+		this.bg = this.add.sprite(0, 0, 'background');
+		this.bg.setOrigin(0, 0);
+		
+		//  The this.score
+		this.scoreText = this.add.text(16, 16, 'this.score: 0', {
+			fontSize: '32px',
+			fill: '#000'
+		});		
+		
 			// The player and its settings
 		this.player = this.physics.add.sprite(100, 450, 'dude');
 		this.player.setCollideWorldBounds(true);
@@ -79,7 +95,7 @@ class CrateScene extends Phaser.Scene {
         //this.matter.world.setBounds(0, -200, game.config.width, game.config.height + 200);
 
         // waiting for user input
-        this.input.on("pointerdown", function(pointer){
+        //this.input.on("pointerdown", function(pointer){
 
             // getting Matter bodies under the pointer
             //var bodiesUnderPointer = Phaser.Physics.Matter.Matter.Query.point(this.matter.world.localWorld.bodies, pointer);
@@ -88,7 +104,7 @@ class CrateScene extends Phaser.Scene {
             //if(bodiesUnderPointer.length == 0){
 
                 // create a crate
-                this.physics.add.overlap(this.player,this.physics.add.sprite(pointer.x, pointer.y, "crate"), this.gameOver, null, this);
+                
             //}
 
             // this is where I wanted to remove the crate. Unfortunately I did not find a quick way to delete the Sprite
@@ -97,8 +113,18 @@ class CrateScene extends Phaser.Scene {
                 bodiesUnderPointer[0].gameObject.visible = false;
                 this.matter.world.remove(bodiesUnderPointer[0])
             }*/
-        }, this);
+        //}, this);
     }
+	
+	getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+	}	
+	
+	addCrate(){
+		this.physics.add.overlap(this.player,this.physics.add.sprite(this.player.x+this.getRandomInt(-200, 200), 200-this.getRandomInt(0, 200), "crate"), this.gameOver, null, this);
+	}
 	
 	gameOver() {
 		// flag to set player is dead
@@ -146,5 +172,22 @@ class CrateScene extends Phaser.Scene {
 		if (this.cursors.up.isDown && this.player.body.touching.down) {
 			this.player.setVelocityY(-330);
 		}
+		
+		this.scoreText.setText(Math.ceil((30000 - time)/1000));
+		this.newCrateTime = this.newCrateTime + delta;
+		if(this.newCrateTime > this.timing )
+		{
+			this.addCrate();
+			this.newCrateTime = 0;
+		}
+		this.newDifficultyTime = this.newDifficultyTime + delta;
+		if(this.newDifficultyTime > 3000)
+		{
+			this.timing = this.timing - 125;
+			this.newDifficultyTime = 0;
+		}
+		
+		if(time > 30000)
+			this.gameOver();
 	}
 }
