@@ -21,13 +21,13 @@ class BreakoutScene extends Phaser.Scene {
         this.load.atlas('assets', 'assets/breakout.png', 'assets/breakout.json');
 		this.count = 10;
 		
-		this.load.image('background', 'assets/Sublime.png');
+		this.load.image('backgroundBreakout', 'assets/Sublime.png');
     }
 
     create()
     {
 		
-		this.bg = this.add.sprite(0, 0, 'background');
+		this.bg = this.add.sprite(0, 0, 'backgroundBreakout');
 		this.bg.setOrigin(0, 0);
 		
         //  Enable world bounds, but disable the floor
@@ -97,7 +97,7 @@ class BreakoutScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.switch('CrateScene');
+			this.scene.switch('SokobanScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 

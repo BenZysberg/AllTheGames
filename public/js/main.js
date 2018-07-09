@@ -9,13 +9,18 @@ let config = {
 	scene: [
 		BootScene,
 		TitleScene,
+		PlaneScene,  //DRIVE DESTINY TO SCHOOL 
 		BreakoutScene, //FIX THE CSS
-		PlaneScene,  //LEAVE THE BUILDING
-		PacManScene, //WEDNESDAY : DRIVE DESTINY TO SCHOOL 
 		SokobanScene, //FRIDAY : PUSH CODE
-		StarScene, //EAT THE RICE
 		FrogerScene, //HEAD OUT!!
 		CrateScene, //DON'T SMOKE!!
+		StarScene, //EAT THE RICE
+		
+		PacManScene, //WEDNESDAY : DRIVE DESTINY TO SCHOOL 
+		
+		
+		
+		
 		MarioScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 		KnifeScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 		ThreesScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL

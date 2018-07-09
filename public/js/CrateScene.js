@@ -33,11 +33,11 @@ class CrateScene extends Phaser.Scene {
 
         // loading crate image
         this.load.image("crate", "assets/Camel.jpg");
-		this.load.spritesheet('dude', 'assets/dude.png', {
+		this.load.spritesheet('dudeCrate', 'assets/dude.png', {
 			frameWidth: 36,
 			frameHeight: 48
 		});
-		this.load.image('background', 'assets/CafeBleu.jpg');			
+		this.load.image('backgroundCrate', 'assets/CafeBleu.jpg');			
     }
 
     // function to be executed once the scene has been created
@@ -45,7 +45,7 @@ class CrateScene extends Phaser.Scene {
 
 	
 		//  A simple background for our game
-		this.bg = this.add.sprite(0, 0, 'background');
+		this.bg = this.add.sprite(0, 0, 'backgroundCrate');
 		this.bg.setOrigin(0, 0);
 		
 		//  The this.score
@@ -55,13 +55,13 @@ class CrateScene extends Phaser.Scene {
 		});		
 		
 			// The player and its settings
-		this.player = this.physics.add.sprite(100, 450, 'dude');
+		this.player = this.physics.add.sprite(100, 450, 'dudeCrate');
 		this.player.setCollideWorldBounds(true);
 
 		//  Our this.player animations, turning, walking left and walking right.
 		this.anims.create({
 			key: 'left',
-			frames: this.anims.generateFrameNumbers('dude', {
+			frames: this.anims.generateFrameNumbers('dudeCrate', {
 				start: 0,
 				end: 3
 			}),
@@ -72,7 +72,7 @@ class CrateScene extends Phaser.Scene {
 		this.anims.create({
 			key: 'turn',
 			frames: [{
-				key: 'dude',
+				key: 'dudeCrate',
 				frame: 4
 			}],
 			frameRate: 20
@@ -80,7 +80,7 @@ class CrateScene extends Phaser.Scene {
 
 		this.anims.create({
 			key: 'right',
-			frames: this.anims.generateFrameNumbers('dude', {
+			frames: this.anims.generateFrameNumbers('dudeCrate', {
 				start: 5,
 				end: 8
 			}),
@@ -140,7 +140,7 @@ class CrateScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.switch('PlaneScene');
+			this.scene.switch('StarScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 
@@ -187,7 +187,7 @@ class CrateScene extends Phaser.Scene {
 			this.newDifficultyTime = 0;
 		}
 		
-		if(time > 30000)
-			this.gameOver();
+		//if(time > 30000)
+			//this.gameOver();
 	}
 }

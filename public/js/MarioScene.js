@@ -29,7 +29,7 @@ class MarioScene extends Phaser.Scene {
 		// simple coin image
 		this.load.image('coin', 'assets/coinGold.png');
 		// player animations
-		this.load.atlas('player', 'assets/playerMario.png', 'assets/player.json');
+		this.load.atlas('playerMario', 'assets/playerMario.png', 'assets/player.json');
 	}
 
 	create() {
@@ -53,7 +53,7 @@ class MarioScene extends Phaser.Scene {
 		this.physics.world.bounds.height = this.groundLayer.height;
 
 		// create the player sprite    
-		this.player = this.physics.add.sprite(200, 200, 'player');
+		this.player = this.physics.add.sprite(200, 200, 'playerMario');
 		this.player.setBounce(0.2); // our player will bounce from items
 		this.player.setCollideWorldBounds(true); // don't go out of the this.map    
 		
@@ -71,14 +71,14 @@ class MarioScene extends Phaser.Scene {
 		// player walk animation
 		this.anims.create({
 			key: 'walk',
-			frames: this.anims.generateFrameNames('player', {prefix: 'p1_walk', start: 1, end: 11, zeroPad: 2}),
+			frames: this.anims.generateFrameNames('playerMario', {prefix: 'p1_walk', start: 1, end: 11, zeroPad: 2}),
 			frameRate: 10,
 			repeat: -1
 		});
 		// idle with only one frame, so repeat is not neaded
 		this.anims.create({
 			key: 'idle',
-			frames: [{key: 'player', frame: 'p1_stand'}],
+			frames: [{key: 'playerMario', frame: 'p1_stand'}],
 			frameRate: 10,
 		});
 

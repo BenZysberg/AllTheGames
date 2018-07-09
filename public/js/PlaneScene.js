@@ -19,24 +19,7 @@ class PlaneScene extends Phaser.Scene {
         this.load.atlas('sheet', 'assets/sheet.png', 'assets/sheet.json');
     }
 	
-	resize() {
-		console.log("Resize");
-        var canvas = game.canvas, width = window.innerWidth, height = window.innerHeight;
-        var wratio = width / height, ratio = canvas.width / canvas.height;
-
-        if (wratio < ratio) {
-            canvas.style.width = width + "px";
-            canvas.style.height = (width / ratio) + "px";
-        } else {
-            canvas.style.width = (height * ratio) + "px";
-            canvas.style.height = height + "px";
-        }
-    }
-	
 	create() {
-        //window.addEventListener('resize', resize);
-        //this.resize();
-
         this.anims.create({
             key: 'plane',
             repeat: -1,
@@ -46,7 +29,7 @@ class PlaneScene extends Phaser.Scene {
 		
 		this.cursors = this.input.keyboard.createCursorKeys();
 
-        this.bg = this.add.tileSprite(0, 0, 800, 480, 'sheet', 'background.png').setOrigin(0);
+        this.bg = this.add.tileSprite(0, 0, 1920, 1080, 'sheet', 'background.png').setOrigin(0);
         this.plane = this.physics.add.sprite(400, 300, 'sheet').play('plane');
     }
 

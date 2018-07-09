@@ -28,16 +28,16 @@ class StarScene extends Phaser.Scene {
 		this.load.image('platform', 'assets/platform.png');
 		this.load.image('star', 'assets/Rice.png');
 		this.load.image('bomb', 'assets/bomb.png');
-		this.load.spritesheet('dude', 'assets/dude.png', {
+		this.load.spritesheet('playerStar', 'assets/dude.png', {
 			frameWidth: 36,
 			frameHeight: 48
 		});
-		this.load.image('background', 'assets/Soup.png');		
+		this.load.image('backgroundStar', 'assets/Soup.png');		
 	}
 
 	create() {
 		//  A simple background for our game
-		this.bg = this.add.sprite(0, 0, 'background');
+		this.bg = this.add.sprite(0, 0, 'backgroundStar');
 		this.bg.setOrigin(0, 0);
 
 		//  The this.platforms group contains the ground and the 2 ledges we can jump on
@@ -58,7 +58,7 @@ class StarScene extends Phaser.Scene {
 		this.platforms.create(750, 220, 'ground');*/
 
 		// The player and its settings
-		this.player = this.physics.add.sprite(100, 450, 'dude');
+		this.player = this.physics.add.sprite(100, 450, 'playerStar');
 
 		//  this.player physics properties. Give the little guy a slight bounce.
 		this.player.setBounce(0.2);
@@ -67,7 +67,7 @@ class StarScene extends Phaser.Scene {
 		//  Our this.player animations, turning, walking left and walking right.
 		this.anims.create({
 			key: 'left',
-			frames: this.anims.generateFrameNumbers('dude', {
+			frames: this.anims.generateFrameNumbers('playerStar', {
 				start: 0,
 				end: 3
 			}),
@@ -78,7 +78,7 @@ class StarScene extends Phaser.Scene {
 		this.anims.create({
 			key: 'turn',
 			frames: [{
-				key: 'dude',
+				key: 'playerStar',
 				frame: 4
 			}],
 			frameRate: 20
@@ -86,7 +86,7 @@ class StarScene extends Phaser.Scene {
 
 		this.anims.create({
 			key: 'right',
-			frames: this.anims.generateFrameNumbers('dude', {
+			frames: this.anims.generateFrameNumbers('playerStar', {
 				start: 5,
 				end: 8
 			}),
@@ -171,7 +171,7 @@ class StarScene extends Phaser.Scene {
 
 		if (this.stars.countActive(true) === 0) {
 
-			//this.gameOver();
+			this.gameOver();
 			//  A new batch of this.stars to collect
 			this.stars.children.iterate(function(child) {
 

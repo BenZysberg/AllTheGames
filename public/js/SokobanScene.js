@@ -10,14 +10,15 @@ class SokobanScene extends Phaser.Scene {
 		this.CRATE = 3;
 		this.PLAYERSPOT = 4;	
 		this.level = [
-			[1,1,1,1,1,1,1,1],
-			[1,0,0,1,1,1,1,1],
-			[1,0,0,1,1,1,1,1],
-			[1,0,0,0,0,0,0,1],
-			[1,1,4,2,1,3,0,1],
-			[1,0,0,0,1,0,0,1],
-			[1,0,0,0,1,1,1,1],
-			[1,1,1,1,1,1,1,1]
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1],
+			[1,1,4,2,1,3,0,1,1,1,1,1,1,1,1,1,1],
+			[1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,1],
+			[1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 		];
 		this.gameOptions = {
 			tileSize: 80,
@@ -29,7 +30,7 @@ class SokobanScene extends Phaser.Scene {
 
 	preload() {
 		console.log("CAR");		
-        this.load.spritesheet("tiles", "assets/sokotiles.png", {
+        this.load.spritesheet("tilesSokoban", "assets/sokotiles.png", {
             frameWidth: this.gameOptions.tileSize,
             frameHeight: this.gameOptions.tileSize
         });		
@@ -58,25 +59,25 @@ class SokobanScene extends Phaser.Scene {
                 switch(this.level[i][j]){
                     case this.PLAYERSPOT:
                     case this.PLAYERSPOT + this.SPOT:
-                        this.player = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j]);
+                        this.player = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j]);
                         this.player.posX = j;
                         this.player.posY = i;
                         this.player.depth = 1
                         this.player.setOrigin(0);
-                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j] - this.PLAYERSPOT);
+                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j] - this.PLAYERSPOT);
                         tile.setOrigin(0);
                         tile.depth = 0;
                         break;
                     case this.CRATE:
                     case this.CRATE + this.SPOT:
-                        this.crates[i][j] = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j]);
+                        this.crates[i][j] = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j]);
                         this.crates[i][j].setOrigin(0);
                         this.crates[i][j].depth = 1
-                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j] - this.CRATE);
+                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j] - this.CRATE);
                         tile.setOrigin(0);
                         break;
                     default:
-                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tiles", this.level[i][j]);
+                        var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j]);
                         tile.setOrigin(0);
                 }
             }
@@ -157,7 +158,7 @@ class SokobanScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.switch('BreakoutScene');
+			this.scene.switch('FrogerScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 

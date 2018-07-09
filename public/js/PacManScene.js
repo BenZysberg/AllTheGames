@@ -41,18 +41,18 @@ class PacManScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('dot', 'assets/dot.png');
-		this.load.image('tiles', 'assets/pacman-tiles.png');
+		this.load.image('tilesPacman', 'assets/pacman-tiles.png');
 		this.load.spritesheet('pacman', 'assets/pacman.png', { frameWidth: 16, frameHeight: 16 });
 		//this.load.spritesheet('pacman', 'assets/PacWoman.png', { frameWidth: 128, frameHeight: 128 });
-		this.load.tilemapTiledJSON('map', 'assets/pacman-map.json');
+		this.load.tilemapTiledJSON('mapPacman', 'assets/pacman-map.json');
 
 		//  Needless to say, graphics (C)opyright Namco		
 	}
 
 	create() {
 
-		this.map = this.add.tilemap('map');
-		this.tileset = this.map.addTilesetImage('pacman-tiles', 'tiles');
+		this.map = this.add.tilemap('mapPacman');
+		this.tileset = this.map.addTilesetImage('pacman-tiles', 'tilesPacman');
 
 		this.layer = this.map.createDynamicLayer('Pacman', this.tileset, 0, 0);
 

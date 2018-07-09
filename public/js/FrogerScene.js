@@ -21,8 +21,8 @@ class FrogerScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image('background', 'assets/vip.jpg');
-		this.load.image('player', 'assets/player.png');
+		this.load.image('backgroundFroger', 'assets/vip.jpg');
+		this.load.image('playerFroger', 'assets/player.png');
 		this.load.image('dragon', 'assets/MaziarFarzam.png');
 		this.load.image('treasure', 'assets/Door.jpg');
 	}
@@ -39,15 +39,15 @@ class FrogerScene extends Phaser.Scene {
 		this.bUpKeyDown = false;
 		this.bDownKeyDown = false;	
 		//this.scene.bringToTop();
-		// background
-		this.bg = this.add.sprite(0, 0, 'background');
+		// backgroundFroger
+		this.bg = this.add.sprite(0, 0, 'backgroundFroger');
 		//this.bg.setScale(0.5);
 
 		// change origin to the top-left of the sprite
 		this.bg.setOrigin(0, 0);
 
 		// player
-		this.player = this.physics.add.sprite(60, this.sys.game.config.height / 2, 'player');
+		this.player = this.physics.add.sprite(60, this.sys.game.config.height / 2, 'playerFroger');
 
 		// scale down
 		this.player.setScale(0.5);
@@ -203,7 +203,7 @@ class FrogerScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.switch('StarScene');
+			this.scene.switch('CrateScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 
