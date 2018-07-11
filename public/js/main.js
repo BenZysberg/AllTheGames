@@ -10,12 +10,11 @@ let config = {
 		BootScene,
 		TitleScene,
 		PlaneScene,  //DRIVE DESTINY TO SCHOOL 
-		BreakoutScene, //FIX THE CSS
+		BreakoutScene, //BREAK THE CSS
 		SokobanScene, //FRIDAY : PUSH CODE
 		FrogerScene, //HEAD OUT!!
 		CrateScene, //DON'T SMOKE!!
 		StarScene, //EAT THE RICE
-		
 		PacManScene, //WEDNESDAY : DRIVE DESTINY TO SCHOOL 
 		
 		
