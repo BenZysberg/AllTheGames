@@ -53,7 +53,7 @@ class BreakoutScene extends Phaser.Scene {
         this.input.on('pointermove', function (pointer) {
 
             //  Keep the paddle within the game
-            this.paddle.x = Phaser.Math.Clamp(pointer.x, 100, 1180);
+            this.paddle.x = Phaser.Math.Clamp(pointer.x, 60, 1220);
 
             if (this.ball.getData('onPaddle'))
             {

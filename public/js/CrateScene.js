@@ -21,6 +21,7 @@ class CrateScene extends Phaser.Scene {
 		this.newCrateTime = 0;
 		this.newDifficultyTime = 0;
 		this.timing = 1125;
+		this.totalTime = 0;
 	}
 
 	init(){
@@ -175,6 +176,7 @@ class CrateScene extends Phaser.Scene {
 		
 		this.scoreText.setText(Math.ceil((30000 - time)/1000));
 		this.newCrateTime = this.newCrateTime + delta;
+		this.totalTime = this.newCrateTime + delta;
 		if(this.newCrateTime > this.timing )
 		{
 			this.addCrate();
@@ -187,7 +189,7 @@ class CrateScene extends Phaser.Scene {
 			this.newDifficultyTime = 0;
 		}
 		
-		//if(time > 30000)
-			//this.gameOver();
+		if(this.totalTime > 30000)
+			this.gameOver();
 	}
 }

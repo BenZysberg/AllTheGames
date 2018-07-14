@@ -7,7 +7,7 @@ class PlaneScene extends Phaser.Scene {
 					gravity: {
 						y: 0
 					},
-					debug: true
+					debug: false
 				},
 			}			
 		});
@@ -16,11 +16,16 @@ class PlaneScene extends Phaser.Scene {
 		this.newCrateTime = 0;
 		this.newDifficultyTime = 0;
 		this.timing = 3000;
+		this.scoreText;
+		this.livesText;
+		this.distance = 0;
+		this.lives = 3;
 	}
 	
 	preload() {
 		this.load.atlas('sheet', 'assets/sheet.png', 'assets/sheet.json');
-        this.load.image('pipe', 'assets/pipe.png');		
+		this.load.image('pipe', 'assets/pipe.png');	
+		this.load.image('nissan', 'assets/Nissan.png');	
     }
 	
 	create() {
@@ -35,8 +40,17 @@ class PlaneScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 
         this.bg = this.add.tileSprite(0, 0, 1920, 1080, 'sheet', 'background.png').setOrigin(0);
-		this.plane = this.physics.add.sprite(400, 300, 'sheet').play('plane');
+		this.plane = this.physics.add.sprite(400, 300, 'nissan');
 		this.plane.body.gravity.y = 1000; 
+
+		this.scoreText = this.add.text(16, 16, 'Score : '+this.distance, {
+			fontSize: '32px',
+			fill: '#000'
+		});	
+		this.livesText = this.add.text(16, 48, 'Lives : '+this.lives, {
+			fontSize: '32px',
+			fill: '#000'
+		});				
     }
 
 	update(time, delta) {
@@ -58,19 +72,10 @@ class PlaneScene extends Phaser.Scene {
 			this.addRowOfPipes();
 			this.newCrateTime = 0;
 		}
-
-		// enemy movement and collision
-		let enemies = this.pipes.getChildren();
-		let numEnemies = enemies.length;		
-
-		for (let i = 0; i < numEnemies; i++) {
-
-			// enemy collision
-			if (Phaser.Geom.Intersects.RectangleToRectangle(this.plane.getBounds(), enemies[i].getBounds())) {
-				this.gameOver();
-				break;
-			}
-		}		
+		this.distance = this.distance + delta;
+		if(this.distance > 60000)
+			this.win();
+		this.scoreText.setText('Score : '+Math.ceil((this.distance)/1000));			
 	}
 	
 
@@ -81,7 +86,7 @@ class PlaneScene extends Phaser.Scene {
         pipe.body.velocity.x = -250;  
         pipe.checkWorldBounds = true;
 		pipe.outOfBoundsKill = true;
-		//this.physics.add.overlap(this.plane, pipe, this.gameOver, null, this);
+		this.physics.add.overlap(this.plane, pipe, this.gameOver, null, this);
     }
 
     addRowOfPipes() {
@@ -91,10 +96,37 @@ class PlaneScene extends Phaser.Scene {
             if (i != hole && i != hole +1 && i != hole +2) 
                 this.addOnePipe(1600, i*50+20);   
 	}
+
+	win() {
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+		}, [], this);
+
+		this.time.delayedCall(500, function() {
+			this.scene.switch('BreakoutScene');
+		}, [], this);
+
+		// reset camera effects
+		this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);
+	}
 	
 	gameOver() {
-		// flag to set player is dead
-		//this.isPlayerAlive = false;
+		this.lives = this.lives - 1;
+		this.livesText.setText('Lives : '+this.lives)
+
+		let enemies = this.pipes.getChildren();
+		let numEnemies = enemies.length;		
+
+		for (let i = 0; i < numEnemies; i++) {
+
+			enemies[i].disableBody(true, true);
+		}
 
 		// shake the camera
 		this.cameras.main.shake(500);
@@ -104,11 +136,17 @@ class PlaneScene extends Phaser.Scene {
 			this.cameras.main.fade(250);
 		}, [], this);
 
-		// restart game
-		this.time.delayedCall(500, function() {
-			this.scene.switch('BreakoutScene');
-			//this.registry.set('restartScene', true);
-		}, [], this);
+		if(this.lives == 0)
+		{
+			this.time.delayedCall(500, function() {
+				this.scene.switch('BreakoutScene');
+			}, [], this);
+		} else
+		{
+			this.time.delayedCall(500, function() {
+				this.scene.switch('PlaneScene');
+			}, [], this);			
+		}
 
 		// reset camera effects
 		this.time.delayedCall(600, function() {
