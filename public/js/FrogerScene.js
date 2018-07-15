@@ -7,23 +7,27 @@ class FrogerScene extends Phaser.Scene {
 					gravity: {
 						y: 0
 					},
-					debug: false
+					debug: true
 				},
 			}	
-		});		
+		});	
+		this.livesText;    
+		this.lives = 5; 	
 	}
 
 	init() {
-		this.playerSpeed = 100;
-		this.enemySpeed = 8;
-		this.enemyMaxY = 640;
-		this.enemyMinY = 80;
+		this.playerSpeed = 51;
+		this.enemies = [];
+		this.numberEnemyRows = 11;
 	}
 
 	preload() {
 		this.load.image('backgroundFroger', 'assets/vip.jpg');
 		this.load.image('playerFroger', 'assets/player.png');
-		this.load.image('dragon', 'assets/MaziarFarzam.png');
+		this.load.image('mazi', 'assets/MaziarFarzam.png');
+		this.load.image('michelle', 'assets/MichelleFarzam.png');
+		this.load.image('ari', 'assets/AriKaplan.png');
+		this.load.image('penn', 'assets/PennArthur.png');
 		this.load.image('treasure', 'assets/Door.jpg');
 	}
 
@@ -47,7 +51,7 @@ class FrogerScene extends Phaser.Scene {
 		this.bg.setOrigin(0, 0);
 
 		// player
-		this.player = this.physics.add.sprite(60, this.sys.game.config.height / 2, 'playerFroger');
+		this.player = this.physics.add.sprite(41, this.sys.game.config.height / 2, 'playerFroger');
 
 		// scale down
 		this.player.setScale(0.5);
@@ -56,30 +60,59 @@ class FrogerScene extends Phaser.Scene {
 		this.treasure = this.physics.add.sprite(this.sys.game.config.width - 80, this.sys.game.config.height / 2, 'treasure');
 		this.treasure.setScale(0.6);
 
-		// group of enemies
-		this.enemies = this.physics.add.group({
-			key: 'dragon',
-			repeat: 10,
-			setXY: {
-				x: 110,
-				y: this.sys.game.config.height / 2,
-				stepX: 100,
-				stepY: 20
+
+		for(let i=0; i<this.numberEnemyRows; i++)
+		{
+			let enemyType = 'mazi';
+			let enemySpeed = 1;
+			console.log(i%4);
+			switch(i%4){
+				case 0:
+					enemyType = 'mazi';
+					break;
+				case 1:	
+					enemyType = 'michelle';
+					break;
+				case 2:	
+					enemyType = 'ari';
+					break;		
+				case 3:	
+					enemyType = 'penn';
+					break;									
 			}
-		});
+			switch(i%2){
+				case 0:
+					enemySpeed = 1;
+					break;
+				case 1:	
+					enemySpeed = -1;
+					break;
+			}
 
-		// scale enemies
-		Phaser.Actions.ScaleXY(this.enemies.getChildren(), -0.5, -0.5);
-
-		// set speeds
-		Phaser.Actions.Call(this.enemies.getChildren(), function(enemy) {
-			enemy.speed = Math.random() * 2 + 1;
-		}, this);
+			this.enemies[i] = this.physics.add.group({
+				key: enemyType,
+				repeat: 4,
+				setXY: {
+					x: 92+i*92+i*10,
+					y: 0,
+					stepX: 0,
+					stepY: 144
+				}
+			});
+			Phaser.Actions.ScaleXY(this.enemies[i].getChildren(), -0.5, -0.5);
+			Phaser.Actions.Call(this.enemies[i].getChildren(), function(enemy) {
+				enemy.speed = enemySpeed;
+			}, this);			
+		}			
 
 		// player is alive
 		this.isPlayerAlive = true;
 		
 		this.cursors = this.input.keyboard.createCursorKeys();
+
+		this.livesText = this.add.text(16, 16, 'Lives : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 74, color: "#ff0000" });
+		this.livesText.setStroke('#0000ff', 16);
+		//this.livesText.setShadow(2, 2, "#ffffff", 2, true, true);	
 	}
 	
 	endSwipe(e) {
@@ -165,28 +198,47 @@ class FrogerScene extends Phaser.Scene {
 			this.gameOver();
 		}
 
-		// enemy movement and collision
-		let enemies = this.enemies.getChildren();
-		let numEnemies = enemies.length;
+		for(let i=0; i<this.numberEnemyRows; i++)
+		{
 
-		for (let i = 0; i < numEnemies; i++) {
+			// enemy movement and collision
+			let oneRow = this.enemies[i].getChildren();
+			let numEnemies = oneRow.length;
 
-			// move enemies
-			enemies[i].y += enemies[i].speed;
+			for (let j = 0; j < numEnemies; j++) {
 
-			// reverse movement if reached the edges
-			if (enemies[i].y >= this.enemyMaxY && enemies[i].speed > 0) {
-				enemies[i].speed *= -1;
-			} else if (enemies[i].y <= this.enemyMinY && enemies[i].speed < 0) {
-				enemies[i].speed *= -1;
-			}
+				// move enemies
+				oneRow[j].y += oneRow[j].speed;
 
-			// enemy collision
-			if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), enemies[i].getBounds())) {
-				this.gameOver();
-				break;
+				switch(i%2){
+					case 0:
+						if (oneRow[j].y >= 720) {
+							oneRow[j].y = 0;
+						}
+						break;
+					case 1:	
+						if (oneRow[j].y <= 0) {
+							oneRow[j].y = 720;
+						}
+						break;					
+				}
+
+				// enemy collision
+				if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), oneRow[j].getBounds())) {
+					this.die();
+					break;
+				}		
 			}
 		}
+	}
+
+	die() {
+		this.player.x = 41;
+		this.player.y = this.sys.game.config.height / 2;
+		this.lives = this.lives - 1;
+		this.livesText.setText('Lives : '+this.lives)
+		if(this.lives==0)
+			this.gameOver();		
 	}
 
 	gameOver() {

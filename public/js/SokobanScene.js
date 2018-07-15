@@ -166,7 +166,7 @@ class SokobanScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.switch('SokobanScene');
+			this.scene.switch('FrogerScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 
@@ -199,33 +199,35 @@ class SokobanScene extends Phaser.Scene {
 	{
 		this.lives = this.lives - 1;
 		this.livesText.setText('Lives : '+this.lives)
+		if(this.lives==0)
+			this.gameOver();
+		else
+		{
+			for(var i = 0; i < this.level.length; i++){
+				for(var j = 0; j < this.level[i].length; j++){
+					switch(this.level[i][j]){
+						case this.CRATE:
+						case this.CRATE + this.SPOT:
+							this.crates[i][j].destroy();
+							this.level[i][j] = 0;
+							break;
+					}
+				}
+			}
 
-		
-        for(var i = 0; i < this.level.length; i++){
-            for(var j = 0; j < this.level[i].length; j++){
-                switch(this.level[i][j]){
-                    case this.CRATE:
-                    case this.CRATE + this.SPOT:
-						this.crates[i][j].destroy();
-						console.log(i+" "+j);
-						this.level[i][j] = 0;
-						break;
-                }
-            }
-		}
-
-		this.level[4][5] = 3;
-		for(var i = 0; i < this.level.length; i++){
-			for(var j = 0; j < this.level[i].length; j++){
-				switch(this.level[i][j]){
-					case this.CRATE:
-					case this.CRATE + this.SPOT:
-						this.crates[i][j] = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j]);
-						this.crates[i][j].setOrigin(0);
-						this.crates[i][j].depth = 1
-						var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j] - this.CRATE);
-						tile.setOrigin(0);
-						break;
+			this.level[4][5] = 3;
+			for(var i = 0; i < this.level.length; i++){
+				for(var j = 0; j < this.level[i].length; j++){
+					switch(this.level[i][j]){
+						case this.CRATE:
+						case this.CRATE + this.SPOT:
+							this.crates[i][j] = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j]);
+							this.crates[i][j].setOrigin(0);
+							this.crates[i][j].depth = 1
+							var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j] - this.CRATE);
+							tile.setOrigin(0);
+							break;
+					}
 				}
 			}
 		}	
