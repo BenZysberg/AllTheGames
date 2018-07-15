@@ -25,7 +25,9 @@ class SokobanScene extends Phaser.Scene {
 			gameWidth: 320,
 			gameHeight: 320,
 			gameSpeed: 100
-		}		
+		}
+        this.livesText;    
+		this.lives = 3; 				
 	}
 
 	preload() {
@@ -44,10 +46,16 @@ class SokobanScene extends Phaser.Scene {
 		this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);		
 		this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);		
 		this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+		this.resetKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 		this.bLeftKeyDown = false;
 		this.bRightKeyDown = false;
 		this.bUpKeyDown = false;
-		this.bDownKeyDown = false;		
+		this.bDownKeyDown = false;
+		this.bRKeyDown = false;
+		this.livesText = this.add.text(16, 16, 'Lives : '+this.lives, {
+			fontSize: '32px',
+			fill: '#000'
+		});					
 	}
 	
     drawLevel(){
@@ -158,7 +166,7 @@ class SokobanScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.switch('FrogerScene');
+			this.scene.switch('SokobanScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 
@@ -187,10 +195,59 @@ class SokobanScene extends Phaser.Scene {
 			this.gameOver();
 	}	
 	
+	reset()
+	{
+		this.lives = this.lives - 1;
+		this.livesText.setText('Lives : '+this.lives)
+
+		
+        for(var i = 0; i < this.level.length; i++){
+            for(var j = 0; j < this.level[i].length; j++){
+                switch(this.level[i][j]){
+                    case this.CRATE:
+                    case this.CRATE + this.SPOT:
+						this.crates[i][j].destroy();
+						console.log(i+" "+j);
+						this.level[i][j] = 0;
+						break;
+                }
+            }
+		}
+
+		this.level[4][5] = 3;
+		for(var i = 0; i < this.level.length; i++){
+			for(var j = 0; j < this.level[i].length; j++){
+				switch(this.level[i][j]){
+					case this.CRATE:
+					case this.CRATE + this.SPOT:
+						this.crates[i][j] = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j]);
+						this.crates[i][j].setOrigin(0);
+						this.crates[i][j].depth = 1
+						var tile = this.add.sprite(this.gameOptions.tileSize * j, this.gameOptions.tileSize * i, "tilesSokoban", this.level[i][j] - this.CRATE);
+						tile.setOrigin(0);
+						break;
+				}
+			}
+		}	
+	}
 
 	update(time, delta) {
 		
 		
+		if(!this.bRKeyDown)
+		{
+			if (this.resetKey.isDown) {
+				this.reset();
+				this.bRKeyDown = true;
+			}
+		}	
+		else
+		{
+			if(this.resetKey.isUp)
+			{ 
+				this.bRKeyDown = false;
+			}
+		}		
 	
 		if (!this.bLeftKeyDown)
 		{

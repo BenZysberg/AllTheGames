@@ -86,7 +86,7 @@ class PlaneScene extends Phaser.Scene {
         pipe.body.velocity.x = -250;  
         pipe.checkWorldBounds = true;
 		pipe.outOfBoundsKill = true;
-		this.physics.add.overlap(this.plane, pipe, this.gameOver, null, this);
+		this.physics.add.overlap(this.plane, pipe, this.die, null, this);
     }
 
     addRowOfPipes() {
@@ -116,7 +116,7 @@ class PlaneScene extends Phaser.Scene {
 		}, [], this);
 	}
 	
-	gameOver() {
+	die() {
 		this.lives = this.lives - 1;
 		this.livesText.setText('Lives : '+this.lives)
 

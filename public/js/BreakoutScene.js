@@ -14,12 +14,16 @@ class BreakoutScene extends Phaser.Scene {
 		        this.bricks;
         this.paddle;
         this.ball;	
+		this.scoreText;
+        this.livesText;    
+		this.score = 0;
+		this.lives = 3;            
     }
 
     preload()
     {
         this.load.atlas('assets', 'assets/breakout.png', 'assets/breakout.json');
-		this.count = 10;
+		this.count = 20;
 		
 		this.load.image('backgroundBreakout', 'assets/Sublime.png');
     }
@@ -71,11 +75,23 @@ class BreakoutScene extends Phaser.Scene {
             }
 
         }, this);
+
+		this.scoreText = this.add.text(16, 16, 'Score : '+this.score, {
+			fontSize: '32px',
+			fill: '#000'
+		});	
+		this.livesText = this.add.text(16, 48, 'Lives : '+this.lives, {
+			fontSize: '32px',
+			fill: '#000'
+		});	
+        
     }
 
     hitBrick(ball, brick)
     {
         brick.disableBody(true, true);
+		this.score = this.score + 1;
+		this.scoreText.setText('Score : '+this.score)          
 		this.count--;
         if (this.count === 0)
         {
@@ -112,6 +128,10 @@ class BreakoutScene extends Phaser.Scene {
         this.ball.setVelocity(0);
         this.ball.setPosition(this.paddle.x, 500);
         this.ball.setData('onPaddle', true);
+		this.lives = this.lives - 1;
+        this.livesText.setText('Lives : '+this.lives)
+        if(this.lives == 0)
+            this.gameOver();
     }
 
     resetLevel()
