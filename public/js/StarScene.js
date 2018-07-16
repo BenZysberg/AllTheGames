@@ -177,7 +177,8 @@ class StarScene extends Phaser.Scene {
 		//  Add and update the this.score
 		this.score += 1;
 		this.scoreText.setText('Rice Bowls: ' + this.score);
-
+		if(this.score == 40)
+			this.gameOver();
 		if (this.stars.countActive(true) === 0) {
 
 			//this.gameOver();
@@ -200,20 +201,30 @@ class StarScene extends Phaser.Scene {
 	}
 
 	hitBomb(player, bomb) {
-		this.lives = this.lives - 1;
-		this.livesText.setText('Vegan superpowers : ' + this.lives);
-		this.player.setTint(0xff0000);
-
-		this.player.anims.play('turn');
-
-		this.isPlayerAlive = true;
-
-
+		if(this.isPlayerAlive)
+		{
+			this.lives = this.lives - 1;
+			this.livesText.setText('Vegan superpowers : ' + this.lives);
+			this.player.setTint(0xff0000);
+			this.isPlayerAlive = false;
+			this.player.anims.play('turn');
+			if(this.lives==0)
+				this.gameOver();
+			else
+			{
+				this.cameras.main.shake(500);
+				this.time.delayedCall(600, function() {
+					this.cameras.main.resetFX();
+					this.player.setTint(0xffffff);
+					this.isPlayerAlive = true;			
+				}, [], this);
+			}
+		}
 	}
 	
 	gameOver() {
 		// flag to set player is dead
-		this.isPlayerAlive = false;
+
 
 		// shake the camera
 		this.cameras.main.shake(500);
@@ -226,7 +237,7 @@ class StarScene extends Phaser.Scene {
 		// restart game
 		this.time.delayedCall(500, function() {
 			//this.scene.stop('StarScene');
-			this.scene.switch('SokobanScene');
+			this.scene.switch('PacManScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 
