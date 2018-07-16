@@ -22,6 +22,7 @@ class CrateScene extends Phaser.Scene {
 		this.newDifficultyTime = 0;
 		this.timing = 1125;
 		this.totalTime = 0;
+		this.survivalTime = 30;
 	}
 
 	init(){
@@ -50,10 +51,8 @@ class CrateScene extends Phaser.Scene {
 		this.bg.setOrigin(0, 0);
 		
 		//  The this.score
-		this.scoreText = this.add.text(16, 16, 'this.score: 0', {
-			fontSize: '32px',
-			fill: '#000'
-		});		
+		this.scoreText = this.add.text(0, 0, 'Next Uber In : '+this.survivalTime, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText.setStroke('#0000ff', 8);	
 		
 			// The player and its settings
 		this.player = this.physics.add.sprite(100, 450, 'dudeCrate');
@@ -174,9 +173,9 @@ class CrateScene extends Phaser.Scene {
 			this.player.setVelocityY(-330);
 		}
 		
-		this.scoreText.setText(Math.ceil((30000 - time)/1000));
 		this.newCrateTime = this.newCrateTime + delta;
-		this.totalTime = this.newCrateTime + delta;
+		this.totalTime = this.totalTime + delta;
+		this.scoreText.setText('Next Uber In : '+Math.ceil((30000 - this.totalTime)/1000));
 		if(this.newCrateTime > this.timing )
 		{
 			this.addCrate();

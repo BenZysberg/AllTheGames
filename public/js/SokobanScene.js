@@ -52,10 +52,8 @@ class SokobanScene extends Phaser.Scene {
 		this.bUpKeyDown = false;
 		this.bDownKeyDown = false;
 		this.bRKeyDown = false;
-		this.livesText = this.add.text(16, 16, 'Lives : '+this.lives, {
-			fontSize: '32px',
-			fill: '#000'
-		});					
+		this.livesText = this.add.text(0, 48, 'Tries : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText.setStroke('#0000ff', 8);				
 	}
 	
     drawLevel(){
@@ -197,8 +195,14 @@ class SokobanScene extends Phaser.Scene {
 	
 	reset()
 	{
+		this.cameras.main.shake(500);
+
+		// reset camera effects
+		this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);		
 		this.lives = this.lives - 1;
-		this.livesText.setText('Lives : '+this.lives)
+		this.livesText.setText('Tries : '+this.lives)
 		if(this.lives==0)
 			this.gameOver();
 		else

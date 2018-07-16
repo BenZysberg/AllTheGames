@@ -20,6 +20,8 @@ class StarScene extends Phaser.Scene {
 		this.score = 0;
 		this.isPlayerAlive = true;
 		this.scoreText;
+		this.livesText;
+		this.lives = 3;
 	}
 
 	preload() {
@@ -117,11 +119,18 @@ class StarScene extends Phaser.Scene {
 
 		this.bombs = this.physics.add.group();
 
-		//  The this.score
-		this.scoreText = this.add.text(16, 16, 'this.score: 0', {
-			fontSize: '32px',
-			fill: '#000'
-		});
+		let x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+		let bomb = this.bombs.create(x, 16, 'bomb');
+		bomb.setBounce(1);
+		bomb.setCollideWorldBounds(true);
+		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+		bomb.allowGravity = false;		
+
+		this.scoreText = this.add.text(0, 0, 'Rice Bowls : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText.setStroke('#0000ff', 8);
+
+		this.livesText = this.add.text(0, 48, 'Vegan superpowers : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText.setStroke('#0000ff', 8);
 
 		//  Collide the this.player and the this.stars with the this.platforms
 		this.physics.add.collider(this.player, this.platforms);
@@ -166,12 +175,12 @@ class StarScene extends Phaser.Scene {
 		star.disableBody(true, true);
 
 		//  Add and update the this.score
-		this.score += 10;
-		this.scoreText.setText('this.score: ' + this.score);
+		this.score += 1;
+		this.scoreText.setText('Rice Bowls: ' + this.score);
 
 		if (this.stars.countActive(true) === 0) {
 
-			this.gameOver();
+			//this.gameOver();
 			//  A new batch of this.stars to collect
 			this.stars.children.iterate(function(child) {
 
@@ -191,13 +200,15 @@ class StarScene extends Phaser.Scene {
 	}
 
 	hitBomb(player, bomb) {
-		this.physics.pause();
-
+		this.lives = this.lives - 1;
+		this.livesText.setText('Vegan superpowers : ' + this.lives);
 		this.player.setTint(0xff0000);
 
 		this.player.anims.play('turn');
 
 		this.isPlayerAlive = true;
+
+
 	}
 	
 	gameOver() {

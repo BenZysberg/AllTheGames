@@ -7,12 +7,12 @@ class FrogerScene extends Phaser.Scene {
 					gravity: {
 						y: 0
 					},
-					debug: true
+					debug: false
 				},
 			}	
 		});	
 		this.livesText;    
-		this.lives = 5; 	
+		this.lives = 3; 	
 	}
 
 	init() {
@@ -110,8 +110,8 @@ class FrogerScene extends Phaser.Scene {
 		
 		this.cursors = this.input.keyboard.createCursorKeys();
 
-		this.livesText = this.add.text(16, 16, 'Lives : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 74, color: "#ff0000" });
-		this.livesText.setStroke('#0000ff', 16);
+		this.livesText = this.add.text(0, 48, 'Tries : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText.setStroke('#0000ff', 8);
 		//this.livesText.setShadow(2, 2, "#ffffff", 2, true, true);	
 	}
 	
@@ -234,9 +234,15 @@ class FrogerScene extends Phaser.Scene {
 
 	die() {
 		this.player.x = 41;
-		this.player.y = this.sys.game.config.height / 2;
+		this.player.y = this.sys.game.config.height / 2;		
+		this.player.setTint(0xff0000);
+		this.cameras.main.shake(500);
 		this.lives = this.lives - 1;
-		this.livesText.setText('Lives : '+this.lives)
+		this.livesText.setText('Tries : '+this.lives)
+		this.time.delayedCall(500, function() {
+			this.player.setTint(0xffffff);
+		}, [], this);
+
 		if(this.lives==0)
 			this.gameOver();		
 	}
