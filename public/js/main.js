@@ -9,6 +9,7 @@ let config = {
 	scene: [
 		BootScene,
 		TitleScene,
+		KnifeScene, //PREPARE SNACKS
 		PlaneScene,  //DRIVE DESTINY TO SCHOOL 
 		BreakoutScene, //BREAK THE CSS
 		SokobanScene, //FRIDAY : PUSH CODE
@@ -21,7 +22,7 @@ let config = {
 		
 		
 		MarioScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
-		KnifeScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
+
 		ThreesScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 	]
 };

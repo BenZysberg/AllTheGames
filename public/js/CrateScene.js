@@ -51,7 +51,7 @@ class CrateScene extends Phaser.Scene {
 		this.bg.setOrigin(0, 0);
 		
 		//  The this.score
-		this.scoreText = this.add.text(0, 0, 'Next Uber In : '+this.survivalTime, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText = this.add.text(0, 0, 'NEXT UBER IN : '+this.survivalTime, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreText.setStroke('#0000ff', 8);	
 		
 			// The player and its settings
@@ -175,7 +175,7 @@ class CrateScene extends Phaser.Scene {
 		
 		this.newCrateTime = this.newCrateTime + delta;
 		this.totalTime = this.totalTime + delta;
-		this.scoreText.setText('Next Uber In : '+Math.ceil((30000 - this.totalTime)/1000));
+		this.scoreText.setText('NEXT UBER IN : '+Math.ceil((30000 - this.totalTime)/1000));
 		if(this.newCrateTime > this.timing )
 		{
 			this.addCrate();

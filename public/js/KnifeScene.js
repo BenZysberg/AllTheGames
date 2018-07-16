@@ -1,10 +1,14 @@
 class KnifeScene extends Phaser.Scene {
 	constructor(test) {
 		super({
-			key: 'KnifeScene'			
+            key: 'KnifeScene'		
 		});
 		this.cursors;
-		this.isPlayerAlive = true;	
+		this.score = 3;
+		this.isPlayerAlive = true;
+		this.scoreText;
+		this.livesText;
+		this.lives = 10;	
 		this.gameOptions = {
 
             // target rotation speed, in degrees per frame
@@ -34,8 +38,8 @@ class KnifeScene extends Phaser.Scene {
         this.load.image("target", "assets/target.png");
         this.load.image("knife", "assets/knife.png");
         this.load.spritesheet("apple", "assets/apple.png", {
-            frameWidth: 35,
-            frameHeight: 48
+            frameWidth: 70,
+            frameHeight: 96
         });
     }   
 
@@ -53,16 +57,16 @@ class KnifeScene extends Phaser.Scene {
         this.knifeGroup = this.add.group();
 
         // adding the knife
-        this.knife = this.add.sprite(game.config.width / 2, game.config.height / 5 * 4, "knife");
+        this.knife = this.add.sprite(120, 360, "knife");
 
         // adding the target
-        this.target = this.add.sprite(game.config.width / 2, 200, "target");
+        this.target = this.add.sprite(game.config.width / 5 * 4, 360, "target");
 
         // moving the target to front
         this.target.depth = 1;
 
         // starting apple angle
-        var appleAngle = Phaser.Math.Between(0, 360);
+        var appleAngle = 0;
 
         // determing apple angle in radians
         var radians = Phaser.Math.DegToRad(appleAngle - 90);
@@ -95,6 +99,12 @@ class KnifeScene extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
+
+        this.scoreText = this.add.text(0, 0, 'APPLES LEFT : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText.setStroke('#0000ff', 8);
+
+		this.livesText = this.add.text(0, 48, 'KNIVES : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText.setStroke('#0000ff', 8);       
     }
 
     // method to change the rotation speed of the target
@@ -129,7 +139,7 @@ class KnifeScene extends Phaser.Scene {
                 targets: [this.knife],
 
                 // y destination
-                y: this.target.y + this.target.width / 2,
+                x: this.target.x + this.target.width / 2,
 
                 // tween duration
                 duration: this.gameOptions.throwSpeed,
@@ -162,10 +172,24 @@ class KnifeScene extends Phaser.Scene {
 
                     // is this a legal hit?
                     if(legalHit){
-                        console.log(Math.abs(Phaser.Math.Angle.ShortestBetween(this.target.angle, 180 - this.apple.startAngle)));
+                       
+                        // player can now throw again
+                        this.canThrow = true;
+
+                        // adding the rotating knife in the same place of the knife just landed on target
+                        var knife = this.add.sprite(this.knife.x, this.knife.y, "knife");
+
+                        // impactAngle property saves the target angle when the knife hits the target
+                        knife.impactAngle = this.target.angle;
+
+                        // adding the rotating knife to knifeGroup group
+                        this.knifeGroup.add(knife);
+
+                        // bringing back the knife to its starting position
+                        this.knife.x = 120;                        
 
                         // is the knife close enough to the apple? And the appls is still to be hit?
-                        if(Math.abs(Phaser.Math.Angle.ShortestBetween(this.target.angle, 180 - this.apple.startAngle)) < this.gameOptions.minAngle && !this.apple.hit){
+                        if(Math.abs(Phaser.Math.Angle.ShortestBetween(this.target.angle, -90 + this.apple.startAngle)) < this.gameOptions.minAngle && !this.apple.hit){
 
                             // apple has been hit
                             this.apple.hit = true;
@@ -218,20 +242,10 @@ class KnifeScene extends Phaser.Scene {
                             });
                         }
 
-                        // player can now throw again
-                        this.canThrow = true;
-
-                        // adding the rotating knife in the same place of the knife just landed on target
-                        var knife = this.add.sprite(this.knife.x, this.knife.y, "knife");
-
-                        // impactAngle property saves the target angle when the knife hits the target
-                        knife.impactAngle = this.target.angle;
-
-                        // adding the rotating knife to knifeGroup group
-                        this.knifeGroup.add(knife);
-
-                        // bringing back the knife to its starting position
-                        this.knife.y = game.config.height / 5 * 4;
+                        else{
+                            this.lives -= 1;
+                            this.livesText.setText('Knives : '+this.lives);       
+                        }
                     }
 
                     // in case this is not a legal hit
@@ -269,8 +283,14 @@ class KnifeScene extends Phaser.Scene {
     }
 
     die(){
-
-
+        this.canThrow = true;
+        this.knife.x = 120;   
+        this.knife.y = 360;   
+        this.knife.angle = 0;
+        this.lives -= 1;
+        this.livesText.setText('KNIVES : '+this.lives);        
+        if(this.lives == 0)
+            this.gameOver();          
     }
 
     appleCut(){
@@ -286,13 +306,40 @@ class KnifeScene extends Phaser.Scene {
         this.apple.depth = 1;
         let knives = this.knifeGroup.getChildren();
 		let numKnives = knives.length;		
-
-		for (let i = 0; i < numKnives; i++) {
-
-            console.log(i);
-			knives[numKnives-1-i].destroy();
-		}       
+		for (let i = 0; i < numKnives; i++)
+            knives[numKnives-1-i].destroy();
+        this.score -= 1;
+        this.scoreText.setText('APPLES LEFT : '+ this.score);
+        this.lives = 10;
+        this.livesText.setText('KNIVES : '+this.lives);    
+        
+        if(this.score == 0)
+            this.gameOver();
     }
+
+    gameOver() {
+		// flag to set player is dead
+		//this.isPlayerAlive = false;
+
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+		}, [], this);
+
+		// restart game
+		this.time.delayedCall(500, function() {
+			this.scene.switch('PlaneScene');
+			//this.registry.set('restartScene', true);
+		}, [], this);
+
+		// reset camera effects
+		this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);
+	}   
 
     // method to be executed at each frame. Please notice the arguments.
     update(time, delta){
@@ -311,7 +358,7 @@ class KnifeScene extends Phaser.Scene {
                 children[i].angle += this.currentRotationSpeed;
 
                 // turning knife angle in radians
-                var radians = Phaser.Math.DegToRad(children[i].angle + 90);
+                var radians = Phaser.Math.DegToRad(children[i].angle - 180);
 
                 // trigonometry to make the knife rotate around target center
                 children[i].x = this.target.x + (this.target.width / 2) * Math.cos(radians);

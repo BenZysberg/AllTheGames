@@ -43,10 +43,10 @@ class PlaneScene extends Phaser.Scene {
 		this.plane = this.physics.add.sprite(400, 300, 'nissan');
 		this.plane.body.gravity.y = 1000; 
 
-		this.scoreText = this.add.text(0, 0, 'Distance : '+this.distance, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText = this.add.text(0, 0, 'DISTANCE : '+this.distance, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreText.setStroke('#0000ff', 8);
 
-		this.livesText = this.add.text(0, 48, 'Cars : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText = this.add.text(0, 48, 'CARS : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.livesText.setStroke('#0000ff', 8);
     }
 
@@ -72,7 +72,7 @@ class PlaneScene extends Phaser.Scene {
 		this.distance = this.distance + delta;
 		if(this.distance > 60000)
 			this.win();
-		this.scoreText.setText('Distance : '+Math.ceil((this.distance)/1000));			
+		this.scoreText.setText('DISTANCE : '+Math.ceil((this.distance)/1000));			
 	}
 	
 
@@ -115,7 +115,7 @@ class PlaneScene extends Phaser.Scene {
 	
 	die() {
 		this.lives = this.lives - 1;
-		this.livesText.setText('Cars : '+this.lives)
+		this.livesText.setText('CARS : '+this.lives)
 		this.plane.setTint(0xff0000);
 		let enemies = this.pipes.getChildren();
 		let numEnemies = enemies.length;		

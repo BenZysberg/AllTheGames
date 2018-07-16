@@ -110,7 +110,7 @@ class FrogerScene extends Phaser.Scene {
 		
 		this.cursors = this.input.keyboard.createCursorKeys();
 
-		this.livesText = this.add.text(0, 48, 'Tries : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText = this.add.text(0, 48, 'TRIES : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.livesText.setStroke('#0000ff', 8);
 		//this.livesText.setShadow(2, 2, "#ffffff", 2, true, true);	
 	}
@@ -238,7 +238,7 @@ class FrogerScene extends Phaser.Scene {
 		this.player.setTint(0xff0000);
 		this.cameras.main.shake(500);
 		this.lives = this.lives - 1;
-		this.livesText.setText('Tries : '+this.lives)
+		this.livesText.setText('TRIES : '+this.lives)
 		this.time.delayedCall(500, function() {
 			this.player.setTint(0xffffff);
 		}, [], this);

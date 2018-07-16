@@ -75,10 +75,10 @@ class BreakoutScene extends Phaser.Scene {
 
         }, this);
 
-		this.scoreText = this.add.text(0, 0, 'Bugs : '+this.count, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText = this.add.text(0, 0, 'BUGS : '+this.count, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreText.setStroke('#0000ff', 8);
 
-		this.livesText = this.add.text(0, 48, 'Sunflower Seeds : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText = this.add.text(0, 48, 'SUNFLOWER SEEDS : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.livesText.setStroke('#0000ff', 8);
         
     }
@@ -87,7 +87,7 @@ class BreakoutScene extends Phaser.Scene {
     {
         brick.disableBody(true, true);       
         this.count--;
-		this.scoreText.setText('Bugs : '+this.count)          
+		this.scoreText.setText('BUGS : '+this.count)          
         if (this.count === 0)
         {
             this.gameOver();
@@ -124,7 +124,7 @@ class BreakoutScene extends Phaser.Scene {
         this.ball.setPosition(this.paddle.x, 500);
         this.ball.setData('onPaddle', true);
 		this.lives = this.lives - 1;
-        this.livesText.setText('Sunflower Seeds : '+this.lives)
+        this.livesText.setText('SUNFLOWER SEEDS : '+this.lives)
         if(this.lives == 0)
             this.gameOver();
     }

@@ -126,10 +126,10 @@ class StarScene extends Phaser.Scene {
 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 		bomb.allowGravity = false;		
 
-		this.scoreText = this.add.text(0, 0, 'Rice Bowls : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText = this.add.text(0, 0, 'RICE BOWLS : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreText.setStroke('#0000ff', 8);
 
-		this.livesText = this.add.text(0, 48, 'Vegan superpowers : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText = this.add.text(0, 48, 'VEGAN SUPERPOWERS : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.livesText.setStroke('#0000ff', 8);
 
 		//  Collide the this.player and the this.stars with the this.platforms
@@ -204,7 +204,7 @@ class StarScene extends Phaser.Scene {
 		if(this.isPlayerAlive)
 		{
 			this.lives = this.lives - 1;
-			this.livesText.setText('Vegan superpowers : ' + this.lives);
+			this.livesText.setText('VEGAN SUPERPOWERS : ' + this.lives);
 			this.player.setTint(0xff0000);
 			this.isPlayerAlive = false;
 			this.player.anims.play('turn');
