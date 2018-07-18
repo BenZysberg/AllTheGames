@@ -5,10 +5,15 @@ class ThreesScene extends Phaser.Scene {
 		});
 
 		this.gameOptions = {
-			tileSize: 200,
+			tileSize: 180,
 			tweenSpeed: 50,
-			tileSpacing: 20
-		}
+			tileSpacing: 0
+        }
+		this.score = 0;
+		this.isPlayerAlive = true;
+		this.scoreText;
+		this.livesText;
+		this.lives = 100;        
 	}
 
     preload(){
@@ -17,15 +22,20 @@ class ThreesScene extends Phaser.Scene {
             frameWidth: this.gameOptions.tileSize,
             frameHeight: this.gameOptions.tileSize
         });
+		this.load.image('backgroundCafe', 'assets/CafeBleu.jpg');			
     }
-	
+
+    // function to be executed once the scene has been created
     create(){
+		//  A simple background for our game
+		this.bg = this.add.sprite(0, 0, 'backgroundCafe');
+		this.bg.setOrigin(0, 0);
         this.fieldArray = [];
         this.fieldGroup = this.add.group();
         for(var i = 0; i < 4; i++){
             this.fieldArray[i] = [];
             for(var j = 0; j < 4; j++){
-                var two = this.add.sprite(this.tileDestination(j), this.tileDestination(i), "tiles");
+                var two = this.add.sprite(this.tileDestinationX(j), this.tileDestinationY(i), "tiles");
                 two.alpha = 0;
                 two.visible = 0;
                 this.fieldGroup.add(two);
@@ -41,6 +51,12 @@ class ThreesScene extends Phaser.Scene {
         this.addTwo();
         this.addTwo();
         this.input.on("pointerup", this.endSwipe, this);
+        this.scoreText = this.add.text(0, 0, 'ALCOHOL : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText.setStroke('#0000ff', 8);
+        this.scoreText.depth = 9000;
+		this.livesText = this.add.text(0, 48, 'STAMINA : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+        this.livesText.setStroke('#0000ff', 8);
+        this.livesText.depth = 9000;      
     }
 	
     endSwipe(e){
@@ -136,6 +152,10 @@ class ThreesScene extends Phaser.Scene {
                     this.handleMove(1, 0);
                     break;
             }
+            this.lives -= 1;
+            this.livesText.setText('STAMINA : '+ this.lives);
+            if(this.lives==0)
+                this.gameOver();                 
         }
     }
 	
@@ -181,11 +201,11 @@ class ThreesScene extends Phaser.Scene {
     }
 	
     moveTile(tile, row, col, distance, changeNumber){
-        this.movingTiles ++;
+        this.movingTiles ++;   
         this.tweens.add({
             targets: [tile.tileSprite],
-            x: this.tileDestination(col),
-            y: this.tileDestination(row),
+            x: this.tileDestinationX(col),
+            y: this.tileDestinationY(row),
             duration: this.gameOptions.tweenSpeed * distance,
             onComplete: function(tween){
                 tween.parent.scene.movingTiles --;
@@ -203,6 +223,8 @@ class ThreesScene extends Phaser.Scene {
     transformTile(tile, row, col){
         this.movingTiles ++;
         tile.tileSprite.setFrame(this.fieldArray[row][col].tileValue - 1);
+        this.score = this.score + this.fieldArray[row][col].tileValue * 2;
+        this.scoreText.setText('ALCOHOL : '+ this.score);
         this.tweens.add({
             targets: [tile.tileSprite],
             scaleX: 1.1,
@@ -224,8 +246,8 @@ class ThreesScene extends Phaser.Scene {
         for(var i = 0; i < 4; i++){
             for(var j = 0; j < 4; j++){
                 this.fieldArray[i][j].canUpgrade = true;
-                this.fieldArray[i][j].tileSprite.x = this.tileDestination(j);
-                this.fieldArray[i][j].tileSprite.y = this.tileDestination(i);
+                this.fieldArray[i][j].tileSprite.x = this.tileDestinationX(j);
+                this.fieldArray[i][j].tileSprite.y = this.tileDestinationY(i);
                 if(this.fieldArray[i][j].tileValue > 0){
                     this.fieldArray[i][j].tileSprite.alpha = 1;
                     this.fieldArray[i][j].tileSprite.visible = true;
@@ -243,7 +265,35 @@ class ThreesScene extends Phaser.Scene {
         return (row >= 0) && (col >= 0) && (row < 4) && (col < 4);
     }
 	
-    tileDestination(pos){
-        return pos * (this.gameOptions.tileSize + this.gameOptions.tileSpacing) + this.gameOptions.tileSize / 2 + this.gameOptions.tileSpacing
+    tileDestinationX(pos){
+        return 460 + (pos * (this.gameOptions.tileSize + this.gameOptions.tileSpacing) + this.gameOptions.tileSize / 2 + this.gameOptions.tileSpacing)
     }
+
+    tileDestinationY(pos){
+        return pos * (this.gameOptions.tileSize + this.gameOptions.tileSpacing) + this.gameOptions.tileSize / 2 + this.gameOptions.tileSpacing
+    }   
+
+    gameOver() {
+		// flag to set player is dead
+		this.isPlayerAlive = false;
+
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+		}, [], this);
+
+		// restart game
+		this.time.delayedCall(500, function() {
+			this.scene.switch('CrateScene');
+			//this.registry.set('restartScene', true);
+		}, [], this);
+
+		// reset camera effects
+		this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);
+	}   
 }

@@ -176,7 +176,7 @@ class StarScene extends Phaser.Scene {
 
 		//  Add and update the this.score
 		this.score += 1;
-		this.scoreText.setText('Rice Bowls: ' + this.score);
+		this.scoreText.setText('RICE BOWLS : ' + this.score);
 		if(this.score == 40)
 			this.gameOver();
 		if (this.stars.countActive(true) === 0) {

@@ -39,7 +39,7 @@ class CrateScene extends Phaser.Scene {
 			frameWidth: 36,
 			frameHeight: 48
 		});
-		this.load.image('backgroundCrate', 'assets/CafeBleu.jpg');			
+		this.load.image('backgroundCafe', 'assets/CafeBleu.jpg');			
     }
 
     // function to be executed once the scene has been created
@@ -47,7 +47,7 @@ class CrateScene extends Phaser.Scene {
 
 	
 		//  A simple background for our game
-		this.bg = this.add.sprite(0, 0, 'backgroundCrate');
+		this.bg = this.add.sprite(0, 0, 'backgroundCafe');
 		this.bg.setOrigin(0, 0);
 		
 		//  The this.score

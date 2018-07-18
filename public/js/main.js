@@ -12,18 +12,13 @@ let config = {
 		KnifeScene, //PREPARE SNACKS
 		PlaneScene,  //DRIVE DESTINY TO SCHOOL 
 		BreakoutScene, //BREAK THE CSS
-		SokobanScene, //FRIDAY : PUSH CODE
+		SokobanScene, //PUSH CODE
 		FrogerScene, //HEAD OUT!!
+		ThreesScene, //BONUS STAGE : PARTY MODE	
 		CrateScene, //DON'T SMOKE!!
 		StarScene, //EAT THE RICE
-		PacManScene, //WEDNESDAY : DRIVE DESTINY TO SCHOOL 
-		
-		
-		
-		
+		PacManScene, //WEDNESDAY : DRIVE DESTINY TO SCHOOL 								
 		MarioScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
-
-		ThreesScene, //SUNDAY ALTERNATIVE : DRIVE DESTINY TO SCHOOL
 	]
 };
 

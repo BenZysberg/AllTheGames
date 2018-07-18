@@ -261,7 +261,7 @@ class FrogerScene extends Phaser.Scene {
 
 		// restart game
 		this.time.delayedCall(500, function() {
-			this.scene.switch('CrateScene');
+			this.scene.switch('ThreesScene');
 			//this.registry.set('restartScene', true);
 		}, [], this);
 
