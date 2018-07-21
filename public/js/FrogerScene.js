@@ -82,10 +82,10 @@ class FrogerScene extends Phaser.Scene {
 			}
 			switch(i%2){
 				case 0:
-					enemySpeed = 1;
+					enemySpeed = Phaser.Math.Between(1, 2) * 1;
 					break;
 				case 1:	
-					enemySpeed = -1;
+					enemySpeed = Phaser.Math.Between(1, 2) * -1;
 					break;
 			}
 

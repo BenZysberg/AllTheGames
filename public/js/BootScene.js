@@ -6,7 +6,6 @@ class BootScene extends Phaser.Scene {
 	}
 	preload() {}
 	create() {
-		console.log("BOOTED");
 		this.scene.switch('TitleScene');
 	}
 }

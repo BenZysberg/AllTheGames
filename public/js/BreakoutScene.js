@@ -22,7 +22,7 @@ class BreakoutScene extends Phaser.Scene {
     preload()
     {
         this.load.atlas('assets', 'assets/breakout.png', 'assets/breakout.json');
-		this.count = 20;
+		this.count = 30;
 		
 		this.load.image('backgroundBreakout', 'assets/Sublime.png');
     }

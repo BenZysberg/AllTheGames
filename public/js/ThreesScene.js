@@ -51,10 +51,10 @@ class ThreesScene extends Phaser.Scene {
         this.addTwo();
         this.addTwo();
         this.input.on("pointerup", this.endSwipe, this);
-        this.scoreText = this.add.text(0, 0, 'ALCOHOL : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+        this.scoreText = this.add.text(0, 0, 'ALCOHOL : '+this.score+'G', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreText.setStroke('#0000ff', 8);
         this.scoreText.depth = 9000;
-		this.livesText = this.add.text(0, 48, 'STAMINA : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.livesText = this.add.text(0, 48, 'STAMINA : '+this.lives+'%', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
         this.livesText.setStroke('#0000ff', 8);
         this.livesText.depth = 9000;      
     }
@@ -152,8 +152,8 @@ class ThreesScene extends Phaser.Scene {
                     this.handleMove(1, 0);
                     break;
             }
-            this.lives -= 1;
-            this.livesText.setText('STAMINA : '+ this.lives);
+            this.lives -= 2;
+            this.livesText.setText('STAMINA : '+ this.lives+'%');
             if(this.lives==0)
                 this.gameOver();                 
         }
@@ -224,7 +224,7 @@ class ThreesScene extends Phaser.Scene {
         this.movingTiles ++;
         tile.tileSprite.setFrame(this.fieldArray[row][col].tileValue - 1);
         this.score = this.score + this.fieldArray[row][col].tileValue * 2;
-        this.scoreText.setText('ALCOHOL : '+ this.score);
+        this.scoreText.setText('ALCOHOL : '+ this.score+'G');
         this.tweens.add({
             targets: [tile.tileSprite],
             scaleX: 1.1,

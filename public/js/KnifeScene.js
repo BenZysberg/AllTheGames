@@ -312,7 +312,7 @@ class KnifeScene extends Phaser.Scene {
         this.scoreText.setText('APPLES LEFT : '+ this.score);
         this.lives = 10;
         this.livesText.setText('KNIVES : '+this.lives);    
-        
+        this.currentRotationSpeed = (this.currentRotationSpeed) * -1.5;
         if(this.score == 0)
             this.gameOver();
     }
@@ -380,6 +380,6 @@ class KnifeScene extends Phaser.Scene {
         }
 
         // adjusting current rotation speed using linear interpolation
-        this.currentRotationSpeed = Phaser.Math.Linear(this.currentRotationSpeed, this.newRotationSpeed, delta / 1000);
+        //this.currentRotationSpeed = Phaser.Math.Linear(this.currentRotationSpeed, this.newRotationSpeed, delta / 1000);
     }
 }

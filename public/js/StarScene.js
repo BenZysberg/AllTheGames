@@ -22,6 +22,7 @@ class StarScene extends Phaser.Scene {
 		this.scoreText;
 		this.livesText;
 		this.lives = 3;
+		this.level = 1;
 	}
 
 	preload() {
@@ -53,7 +54,7 @@ class StarScene extends Phaser.Scene {
 		
 		for(let i=0; i<4; i++)
 		{
-			this.platforms.create(640+(Math.cos(Math.PI*i)*100), 608-(i*96), 'platform');
+			this.platforms.create(640+(Math.cos(Math.PI*i)*100*this.level), 608-(i*96), 'platform');
 		}
 		/*this.platforms.create(600, 400, 'ground');
 		this.platforms.create(50, 250, 'ground');
@@ -104,9 +105,9 @@ class StarScene extends Phaser.Scene {
 			key: 'star',
 			repeat: 11,
 			setXY: {
-				x: 12,
+				x: 80,
 				y: 0,
-				stepX: 70
+				stepX: 100
 			}
 		});
 
@@ -126,7 +127,7 @@ class StarScene extends Phaser.Scene {
 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 		bomb.allowGravity = false;		
 
-		this.scoreText = this.add.text(0, 0, 'RICE BOWLS : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText = this.add.text(0, 0, 'FULL : '+this.score+'%', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreText.setStroke('#0000ff', 8);
 
 		this.livesText = this.add.text(0, 48, 'VEGAN SUPERPOWERS : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
@@ -176,10 +177,26 @@ class StarScene extends Phaser.Scene {
 
 		//  Add and update the this.score
 		this.score += 1;
-		this.scoreText.setText('RICE BOWLS : ' + this.score);
-		if(this.score == 40)
+		this.scoreText.setText('FULL : ' + (Math.ceil((this.score/30)*100)+'%'));
+		if(this.score == 30)
 			this.gameOver();
 		if (this.stars.countActive(true) === 0) {
+
+			this.level += 1;
+			let platforms = this.platforms.getChildren();
+			let numPlatforms = platforms.length;		
+	
+			for (let i = 1; i < numPlatforms; i++) {
+				platforms[numPlatforms-i].destroy();
+			}
+
+			for(let i=0; i<4; i++)
+			{
+				this.platforms.create(640+(Math.cos(Math.PI*i)*100*this.level), 608-(i*96), 'platform');
+			}
+			this.physics.add.collider(this.player, this.platforms);
+			this.physics.add.collider(this.stars, this.platforms);
+			this.physics.add.collider(this.bombs, this.platforms);			
 
 			//this.gameOver();
 			//  A new batch of this.stars to collect
