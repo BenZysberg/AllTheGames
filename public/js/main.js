@@ -24,10 +24,14 @@ let config = {
 };
 
 var game = new Phaser.Game(config);
-var instructions = ["Click", "Up Arrow", "Touchpad"];
+var instructions = ["Click", "Up Arrow", "Touchpad","Arrows","Arrows","Arrows","Arrows","Arrows"];
+var titles = ["MAKE SNACKS!!", "DRIVE DESTINY TO SCHOOL!!", "FIX THE CSS!!", "PUSH CODE!!", "HEAD OUT!!", "BONUS STAGE : DRINKING GAME!!", "DON'T SMOKE!!", "STAY VEGAN!!"]
 var order = ["KnifeScene","PlaneScene","BreakoutScene","SokobanScene","FrogerScene","ThreesScene","CrateScene","StarScene"];
 var currentScene = 0;
 var bInstructions = false;
+var transitionTime = 5000;
+var victories = [false, false, false, false, false, false, false, false];
+var score = [0,0,0,0,0,0,0,0];
 
 window.focus()
 /*resize();

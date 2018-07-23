@@ -95,22 +95,7 @@ class PlaneScene extends Phaser.Scene {
 	}
 
 	win() {
-		// shake the camera
-		this.cameras.main.shake(500);
-
-		// fade camera
-		this.time.delayedCall(250, function() {
-			this.cameras.main.fade(250);
-		}, [], this);
-
-		this.time.delayedCall(500, function() {
-			this.scene.switch('BreakoutScene');
-		}, [], this);
-
-		// reset camera effects
-		this.time.delayedCall(600, function() {
-			this.cameras.main.resetFX();
-		}, [], this);
+		this.gameOver();
 	}
 	
 	die() {
@@ -135,9 +120,7 @@ class PlaneScene extends Phaser.Scene {
 
 		if(this.lives == 0)
 		{
-			this.time.delayedCall(500, function() {
-				this.scene.switch('BreakoutScene');
-			}, [], this);
+			this.gameOver();
 		} /*else
 		{
 			this.time.delayedCall(500, function() {
@@ -150,7 +133,37 @@ class PlaneScene extends Phaser.Scene {
 			this.cameras.main.resetFX();
 			this.plane.setTint(0xffffff);
 		}, [], this);
-	}	
+	}
+	
+    gameOver() {
+		// flag to set player is dead
+		//this.isPlayerAlive = false;
+
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		/*this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+        }, [], this);*/
+
+        currentScene += 1;
+        let insScene = this.scene.get('InstructionsScene');
+        this.scene.setVisible(true, insScene);  
+        bInstructions = true;
+        insScene.nextScene();
+
+		this.time.delayedCall(transitionTime, function() {
+            this.scene.setVisible(false, insScene);
+            this.scene.switch(order[currentScene]);
+		}, [], this);
+
+		// reset camera effects
+		/*this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);*/
+	} 	
+	
 }
 
 /*if (!window.cordova) {

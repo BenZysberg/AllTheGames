@@ -339,7 +339,7 @@ class KnifeScene extends Phaser.Scene {
         bInstructions = true;
         insScene.nextScene();
 
-		this.time.delayedCall(2000, function() {
+		this.time.delayedCall(transitionTime, function() {
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);

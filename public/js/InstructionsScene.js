@@ -11,17 +11,18 @@ class InstructionsScene extends Phaser.Scene {
 	}
 
 	create() {
+		this.scene.setVisible(false);
 		this.bg = this.add.sprite(0, 0, 'backgroundInstructions');
 		this.bg.setOrigin(0, 0);	
-        this.scoreText = this.add.text(0, 0, 'INSTRUCTIONS :', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
-		this.scoreText.setStroke('#0000ff', 8);
+        this.titleText = this.add.text(0, 0, ''+titles[currentScene], { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.titleText.setStroke('#0000ff', 8);
 
-		this.livesText = this.add.text(0, 48, 'USE : '+instructions[currentScene], { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
-		this.livesText.setStroke('#0000ff', 8);     		
+		this.instructionsText = this.add.text(0, 48, 'USE : '+instructions[currentScene], { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.instructionsText.setStroke('#0000ff', 8);     		
 	}
 
 	nextScene(){
-		this.livesText.setText('USE : '+instructions[currentScene]);
+		this.instructionsText.setText('USE : '+instructions[currentScene]);
 		this.scene.bringToTop();
 	}
 

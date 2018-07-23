@@ -275,25 +275,30 @@ class ThreesScene extends Phaser.Scene {
 
     gameOver() {
 		// flag to set player is dead
-		this.isPlayerAlive = false;
+		//this.isPlayerAlive = false;
 
 		// shake the camera
 		this.cameras.main.shake(500);
 
 		// fade camera
-		this.time.delayedCall(250, function() {
+		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
-		}, [], this);
+        }, [], this);*/
 
-		// restart game
-		this.time.delayedCall(500, function() {
-			this.scene.switch('CrateScene');
-			//this.registry.set('restartScene', true);
+        currentScene += 1;
+        let insScene = this.scene.get('InstructionsScene');
+        this.scene.setVisible(true, insScene);  
+        bInstructions = true;
+        insScene.nextScene();
+
+		this.time.delayedCall(transitionTime, function() {
+            this.scene.setVisible(false, insScene);
+            this.scene.switch(order[currentScene]);
 		}, [], this);
 
 		// reset camera effects
-		this.time.delayedCall(600, function() {
+		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
-		}, [], this);
-	}   
+		}, [], this);*/
+	} 
 }

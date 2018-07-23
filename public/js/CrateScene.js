@@ -126,29 +126,37 @@ class CrateScene extends Phaser.Scene {
 		this.physics.add.overlap(this.player,this.physics.add.sprite(this.player.x+this.getRandomInt(-200, 200), 200-this.getRandomInt(0, 200), "crate"), this.gameOver, null, this);
 	}
 	
-	gameOver() {
-		// flag to set player is dead
-		//this.isPlayerAlive = false;
+    gameOver() {
+		if(this.isPlayerAlive)
+		{
+			// flag to set player is dead
+			this.isPlayerAlive = false;
 
-		// shake the camera
-		this.cameras.main.shake(500);
+			// shake the camera
+			this.cameras.main.shake(500);
 
-		// fade camera
-		this.time.delayedCall(250, function() {
-			this.cameras.main.fade(250);
-		}, [], this);
+			// fade camera
+			/*this.time.delayedCall(250, function() {
+				this.cameras.main.fade(250);
+			}, [], this);*/
 
-		// restart game
-		this.time.delayedCall(500, function() {
-			this.scene.switch('StarScene');
-			//this.registry.set('restartScene', true);
-		}, [], this);
+			currentScene += 1;
+			let insScene = this.scene.get('InstructionsScene');
+			this.scene.setVisible(true, insScene);  
+			bInstructions = true;
+			insScene.nextScene();
 
-		// reset camera effects
-		this.time.delayedCall(600, function() {
-			this.cameras.main.resetFX();
-		}, [], this);
-	}
+			this.time.delayedCall(transitionTime, function() {
+				this.scene.setVisible(false, insScene);
+				this.scene.switch(order[currentScene]);
+			}, [], this);
+
+			// reset camera effects
+			/*this.time.delayedCall(600, function() {
+				this.cameras.main.resetFX();
+			}, [], this);*/
+		}
+	} 
 	
 	update(time, delta) {
 		if (!this.isPlayerAlive) {
