@@ -41,11 +41,13 @@ class KnifeScene extends Phaser.Scene {
             frameWidth: 70,
             frameHeight: 96
         });
+        this.load.image('backgroundKitchen', 'assets/cuisine.jpg');
     }   
 
      // method to be executed once the scene has been created
      create(){
-
+		this.bg = this.add.sprite(0, 0, 'backgroundKitchen');
+		this.bg.setOrigin(0, 0);	
         // at the beginning of the game, both current rotation speed and new rotation speed are set to default rotation speed
         this.currentRotationSpeed = this.gameOptions.rotationSpeed;
         this.newRotationSpeed = this.gameOptions.rotationSpeed;
@@ -244,7 +246,9 @@ class KnifeScene extends Phaser.Scene {
 
                         else{
                             this.lives -= 1;
-                            this.livesText.setText('Knives : '+this.lives);       
+                            this.livesText.setText('Knives : '+this.lives);    
+                            if(this.lives == 0)
+                                this.gameOver();      
                         }
                     }
 
@@ -325,25 +329,29 @@ class KnifeScene extends Phaser.Scene {
 		this.cameras.main.shake(500);
 
 		// fade camera
-		this.time.delayedCall(250, function() {
+		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
-		}, [], this);
+        }, [], this);*/
 
-		// restart game
-		this.time.delayedCall(500, function() {
-			this.scene.switch('PlaneScene');
-			//this.registry.set('restartScene', true);
+        currentScene += 1;
+        let insScene = this.scene.get('InstructionsScene');
+        this.scene.setVisible(true, insScene);  
+        bInstructions = true;
+        insScene.nextScene();
+
+		this.time.delayedCall(2000, function() {
+            this.scene.setVisible(false, insScene);
+            this.scene.switch(order[currentScene]);
 		}, [], this);
 
 		// reset camera effects
-		this.time.delayedCall(600, function() {
+		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
-		}, [], this);
+		}, [], this);*/
 	}   
 
     // method to be executed at each frame. Please notice the arguments.
     update(time, delta){
-
         if(!this.apple.hit){
         // rotating the target
             this.target.angle += this.currentRotationSpeed;

@@ -9,6 +9,7 @@ let config = {
 	scene: [
 		BootScene,
 		TitleScene,
+		InstructionsScene,
 		KnifeScene, //PREPARE SNACKS
 		PlaneScene,  //DRIVE DESTINY TO SCHOOL 
 		BreakoutScene, //BREAK THE CSS
@@ -22,7 +23,11 @@ let config = {
 	]
 };
 
-let game = new Phaser.Game(config);
+var game = new Phaser.Game(config);
+var instructions = ["Click", "Up Arrow", "Touchpad"];
+var order = ["KnifeScene","PlaneScene","BreakoutScene","SokobanScene","FrogerScene","ThreesScene","CrateScene","StarScene"];
+var currentScene = 0;
+var bInstructions = false;
 
 window.focus()
 /*resize();

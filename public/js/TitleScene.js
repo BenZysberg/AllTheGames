@@ -13,7 +13,9 @@ class TitleScene extends Phaser.Scene {
 		if (this.startKey.isDown) {
 			//this.scene.stop('TitleScene');
 			//this.registry.set('attractMode', false);
-			this.scene.switch('KnifeScene');
+			let insScene = this.scene.get('InstructionsScene');
+			this.scene.setVisible(false, insScene);
+			this.scene.switch(order[currentScene]);
 		}
 	}
 }
