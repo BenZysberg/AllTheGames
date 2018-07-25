@@ -12,7 +12,8 @@ class FrogerScene extends Phaser.Scene {
 			}	
 		});	
 		this.livesText;    
-		this.lives = 3; 	
+		this.lives = 3; 
+		this.isPlayerAlive = true;	
 	}
 
 	init() {
@@ -195,7 +196,11 @@ class FrogerScene extends Phaser.Scene {
 
 		// treasure collision
 		if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.treasure.getBounds())) {
-			this.gameOver();
+			if(this.isPlayerAlive)
+			{
+				this.isPlayerAlive = false
+				this.gameOver(true);
+			}
 		}
 
 		for(let i=0; i<this.numberEnemyRows; i++)
@@ -225,8 +230,13 @@ class FrogerScene extends Phaser.Scene {
 
 				// enemy collision
 				if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), oneRow[j].getBounds())) {
-					this.die();
-					break;
+					
+					if(this.isPlayerAlive)
+					{
+						this.isPlayerAlive = false
+						this.die();
+						break;
+					}
 				}		
 			}
 		}
@@ -241,13 +251,14 @@ class FrogerScene extends Phaser.Scene {
 		this.livesText.setText('TRIES : '+this.lives)
 		this.time.delayedCall(500, function() {
 			this.player.setTint(0xffffff);
+			this.isPlayerAlive = true;
 		}, [], this);
 
 		if(this.lives==0)
-			this.gameOver();		
+			this.gameOver(false);		
 	}
 
-    gameOver() {
+    gameOver(bVictory) {
 		// flag to set player is dead
 		//this.isPlayerAlive = false;
 
@@ -258,7 +269,7 @@ class FrogerScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-
+        victories[currentScene] = bVictory;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
@@ -274,7 +285,7 @@ class FrogerScene extends Phaser.Scene {
 		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
 		}, [], this);*/
-	} 
+	}   
 
 	cleanUp() {
 		// Scenes isn't properly destroyed yet.

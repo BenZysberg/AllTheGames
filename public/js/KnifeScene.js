@@ -246,7 +246,7 @@ class KnifeScene extends Phaser.Scene {
 
                         else{
                             this.lives -= 1;
-                            this.livesText.setText('Knives : '+this.lives);    
+                            this.livesText.setText('KNIVES : '+this.lives);    
                             if(this.lives == 0)
                                 this.gameOver();      
                         }
@@ -294,7 +294,7 @@ class KnifeScene extends Phaser.Scene {
         this.lives -= 1;
         this.livesText.setText('KNIVES : '+this.lives);        
         if(this.lives == 0)
-            this.gameOver();          
+            this.gameOver(false);          
     }
 
     appleCut(){
@@ -318,10 +318,10 @@ class KnifeScene extends Phaser.Scene {
         this.livesText.setText('KNIVES : '+this.lives);    
         this.currentRotationSpeed = (this.currentRotationSpeed) * -1.5;
         if(this.score == 0)
-            this.gameOver();
+            this.gameOver(true);
     }
 
-    gameOver() {
+    gameOver(bVictory) {
 		// flag to set player is dead
 		//this.isPlayerAlive = false;
 
@@ -332,7 +332,7 @@ class KnifeScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-
+        victories[currentScene] = bVictory;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  

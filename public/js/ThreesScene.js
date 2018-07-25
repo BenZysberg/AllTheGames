@@ -155,7 +155,7 @@ class ThreesScene extends Phaser.Scene {
             this.lives -= 2;
             this.livesText.setText('STAMINA : '+ this.lives+'%');
             if(this.lives==0)
-                this.gameOver();                 
+                this.gameOver(true);                 
         }
     }
 	
@@ -273,7 +273,7 @@ class ThreesScene extends Phaser.Scene {
         return pos * (this.gameOptions.tileSize + this.gameOptions.tileSpacing) + this.gameOptions.tileSize / 2 + this.gameOptions.tileSpacing
     }   
 
-    gameOver() {
+    gameOver(bVictory) {
 		// flag to set player is dead
 		//this.isPlayerAlive = false;
 
@@ -284,7 +284,7 @@ class ThreesScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-
+        victories[currentScene] = bVictory;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
@@ -300,5 +300,5 @@ class ThreesScene extends Phaser.Scene {
 		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
 		}, [], this);*/
-	} 
+	}  
 }

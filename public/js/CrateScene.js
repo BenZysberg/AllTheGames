@@ -123,10 +123,14 @@ class CrateScene extends Phaser.Scene {
 	}	
 	
 	addCrate(){
-		this.physics.add.overlap(this.player,this.physics.add.sprite(this.player.x+this.getRandomInt(-200, 200), 200-this.getRandomInt(0, 200), "crate"), this.gameOver, null, this);
+		this.physics.add.overlap(this.player,this.physics.add.sprite(this.player.x+this.getRandomInt(-200, 200), 200-this.getRandomInt(0, 200), "crate"), this.die, null, this);
+	}
+
+	die(){
+		this.gameOver(false);
 	}
 	
-    gameOver() {
+    gameOver(bVictory) {
 		if(this.isPlayerAlive)
 		{
 			// flag to set player is dead
@@ -139,7 +143,7 @@ class CrateScene extends Phaser.Scene {
 			/*this.time.delayedCall(250, function() {
 				this.cameras.main.fade(250);
 			}, [], this);*/
-
+			victories[currentScene] = bVictory;
 			currentScene += 1;
 			let insScene = this.scene.get('InstructionsScene');
 			this.scene.setVisible(true, insScene);  
@@ -197,6 +201,6 @@ class CrateScene extends Phaser.Scene {
 		}
 		
 		if(this.totalTime > 30000)
-			this.gameOver();
+			this.gameOver(true);
 	}
 }

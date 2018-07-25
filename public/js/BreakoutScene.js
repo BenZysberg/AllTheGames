@@ -90,11 +90,11 @@ class BreakoutScene extends Phaser.Scene {
 		this.scoreText.setText('BUGS : '+this.count)          
         if (this.count === 0)
         {
-            this.gameOver();
+            this.gameOver(true);
         }
     }
 
-    gameOver() {
+    gameOver(bVictory) {
 		// flag to set player is dead
 		//this.isPlayerAlive = false;
 
@@ -105,7 +105,7 @@ class BreakoutScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-
+        victories[currentScene] = bVictory;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
@@ -121,7 +121,7 @@ class BreakoutScene extends Phaser.Scene {
 		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
 		}, [], this);*/
-	} 
+	}  
 
     resetBall()
     {
@@ -131,7 +131,7 @@ class BreakoutScene extends Phaser.Scene {
 		this.lives = this.lives - 1;
         this.livesText.setText('SUNFLOWER SEEDS : '+this.lives)
         if(this.lives == 0)
-            this.gameOver();
+            this.gameOver(false);
     }
 
     resetLevel()

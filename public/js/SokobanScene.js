@@ -150,7 +150,7 @@ class SokobanScene extends Phaser.Scene {
         this.level[this.player.posY][this.player.posX] += this.PLAYERSPOT;
 	}
 	
-    gameOver() {
+    gameOver(bVictory) {
 		// flag to set player is dead
 		//this.isPlayerAlive = false;
 
@@ -161,7 +161,7 @@ class SokobanScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-
+        victories[currentScene] = bVictory;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
@@ -177,7 +177,7 @@ class SokobanScene extends Phaser.Scene {
 		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
 		}, [], this);*/
-	} 		
+	}  		
 	
     moveCrate(deltaX, deltaY){
 	    var crateTween = this.tweens.add({
@@ -195,7 +195,7 @@ class SokobanScene extends Phaser.Scene {
         this.level[this.player.posY + deltaY][this.player.posX + deltaX] -= this.CRATE;
         this.level[this.player.posY + 2 * deltaY][this.player.posX + 2 * deltaX] += this.CRATE;
 		if(this.level[this.player.posY + 2 * deltaY][this.player.posX + 2 * deltaX] == (this.CRATE+this.SPOT))
-			this.gameOver();
+			this.gameOver(true);
 	}	
 	
 	reset()
@@ -209,7 +209,7 @@ class SokobanScene extends Phaser.Scene {
 		this.lives = this.lives - 1;
 		this.livesText.setText('TRIES : '+this.lives)
 		if(this.lives==0)
-			this.gameOver();
+			this.gameOver(false);
 		else
 		{
 			for(var i = 0; i < this.level.length; i++){

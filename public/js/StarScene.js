@@ -179,7 +179,7 @@ class StarScene extends Phaser.Scene {
 		this.score += 1;
 		this.scoreText.setText('FULL : ' + (Math.ceil((this.score/30)*100)+'%'));
 		if(this.score == 30)
-			this.gameOver();
+			this.gameOver(true);
 		if (this.stars.countActive(true) === 0) {
 
 			this.level += 1;
@@ -226,7 +226,7 @@ class StarScene extends Phaser.Scene {
 			this.isPlayerAlive = false;
 			this.player.anims.play('turn');
 			if(this.lives==0)
-				this.gameOver();
+				this.gameOver(false);
 			else
 			{
 				this.cameras.main.shake(500);
@@ -239,7 +239,7 @@ class StarScene extends Phaser.Scene {
 		}
 	}
 	
-    gameOver() {
+    gameOver(bVictory) {
 		// flag to set player is dead
 		//this.isPlayerAlive = false;
 
@@ -250,7 +250,7 @@ class StarScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-
+        victories[currentScene] = bVictory;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
@@ -266,6 +266,6 @@ class StarScene extends Phaser.Scene {
 		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
 		}, [], this);*/
-	} 	
+	}   	
 
 }
