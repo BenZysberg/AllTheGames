@@ -1,40 +1,52 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8" />
-    <title>AllTheGames</title>
-    
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.min.js"></script>
-    <style type="text/css">
-            body{
-                background: #000000;
-                padding: 0px;
-                margin: 0px;
+<HTML>
+    <HEAD>
+        <TITLE>
+            Video
+        </TITLE>
+        <STYLE type="text/css">
+            html {
+                overflow: hidden;
             }
-			canvas {
-				padding-left: 0;
-				padding-right: 0;
-				margin-left: auto;
-				margin-right: auto;
-				display: block;
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                user-select: none;
             }
-    </style>
-</head>
-<body>
-	<script src="js/BootScene.js"></script>
-	<script src="js/TitleScene.js"></script>
-	<script src="js/FrogerScene.js"></script>
-	<script src="js/StarScene.js"></script>
-	<script src="js/SokobanScene.js"></script>
-	<script src="js/PlaneScene.js"></script>
-	<script src="js/PacManScene.js"></script>
-	<script src="js/CrateScene.js"></script>
-	<script src="js/BreakoutScene.js"></script>
-	<script src="js/MarioScene.js"></script>
-	<script src="js/KnifeScene.js"></script>
-	<script src="js/ThreesScene.js"></script>
-	<script src="js/InstructionsScene.js"></script>
-	<script src="js/FinalScene.js"></script>
-	<script src="js/main.js"></script>
-</body>
-</html>
+            video {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+            }
+        </STYLE>
+        <SCRIPT>
+            var videoIntro;
+            var videoTV;
+            document.addEventListener("keydown", function(event) {
+                videoIntro.play();
+            });
+            document.addEventListener("DOMContentLoaded", function(event) {
+                videoIntro = document.getElementById("intro");
+                videoTV = document.getElementById("tv");
+                videoIntro.style.display = 'block';
+                videoIntro.onended = function() {
+                videoIntro.pause();
+                videoIntro.currentTime = 0;
+                videoIntro.style.display = 'none';
+                videoTV.style.display = 'block';
+                videoTV.play();
+                videoTV.onended = function() {
+                    document.location = ("http://localhost:5057/public/game.html");
+                    };
+                };  
+            });       
+        </SCRIPT>
+    </HEAD>
+    <BODY>
+        <video id="intro" src="assets/Intro.mp4"></video>
+        <video id="tv" src="assets/NoSignal.mp4"></video>
+    </BODY>
+</HTML>
