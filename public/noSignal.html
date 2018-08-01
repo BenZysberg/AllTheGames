@@ -1,0 +1,33 @@
+<HTML>
+    <HEAD>
+        <TITLE>
+            Video
+        </TITLE>
+        <STYLE type="text/css">
+            body {
+                overflow:hidden;
+                margin: 0;
+                padding: 0;
+                position: fixed;
+                right: 0;
+                bottom: 0;
+                min-width: 100%; 
+                min-height: 100%;                
+            }
+            video 
+            {
+                width: 100%;
+                height: auto;
+            }
+        </STYLE>
+        <SCRIPT>
+            document.getElementById('noSignalVideo').addEventListener('ended',myHandler,false);
+            function myHandler(e) {
+                document.location = ("index.html");
+            }            
+        </SCRIPT>
+    </HEAD>
+    <BODY>
+        <video id="noSignalVideo" src="assets/NoSignal.mp4" autoplay></video>
+    </BODY>
+</HTML>

@@ -12,10 +12,10 @@ class FinalScene extends Phaser.Scene {
 	create() {
 		this.bg = this.add.sprite(0, 0, 'backgroundFinal');
 		this.bg.setOrigin(0, 0);
-		this.finalText = this.add.text(300, 32, 'THANKS FOR PLAYING!!', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.finalText = this.add.text(0, 32, 'THANKS FOR PLAYING!!', { fontFamily: "Nintendo NES Font", fontSize: 64, color: "#ff0000" });
 		this.finalText.setStroke('#0000ff', 8);
 		this.endTime = 0;
-		this.scoreboardText = this.add.text(500, 326, 'THANKS FOR PLAYING!!', { fontFamily: "Nintendo NES Font", fontSize: 24, color: "#ff0000" });
+		this.scoreboardText = this.add.text(500, 326, 'THANKS FOR PLAYING!!', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreboardText.setStroke('#0000ff', 8);
 		this.firstRun = true;
 	}

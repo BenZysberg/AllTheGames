@@ -22,13 +22,13 @@ class ThreesScene extends Phaser.Scene {
             frameWidth: this.gameOptions.tileSize,
             frameHeight: this.gameOptions.tileSize
         });
-		this.load.image('backgroundCafe', 'assets/CafeBleu.jpg');			
+		this.load.image('backgroundDrinking', 'assets/drinking.jpg');			
     }
 
     // function to be executed once the scene has been created
     create(){
 		//  A simple background for our game
-		this.bg = this.add.sprite(0, 0, 'backgroundCafe');
+		this.bg = this.add.sprite(0, 0, 'backgroundDrinking');
 		this.bg.setOrigin(0, 0);
         this.fieldArray = [];
         this.fieldGroup = this.add.group();
@@ -152,7 +152,7 @@ class ThreesScene extends Phaser.Scene {
                     this.handleMove(1, 0);
                     break;
             }
-            this.lives -= 2;
+            this.lives -= 4;
             this.livesText.setText('STAMINA : '+ this.lives+'%');
             if(this.lives==0)
                 this.gameOver(true);                 

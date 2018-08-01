@@ -13,7 +13,8 @@ class FrogerScene extends Phaser.Scene {
 		});	
 		this.livesText;    
 		this.lives = 3; 
-		this.isPlayerAlive = true;	
+		this.isPlayerAlive = true;
+		this.score = 0;	
 	}
 
 	init() {
@@ -110,7 +111,8 @@ class FrogerScene extends Phaser.Scene {
 		this.isPlayerAlive = true;
 		
 		this.cursors = this.input.keyboard.createCursorKeys();
-
+        this.scoreText = this.add.text(0, 0, 'MOVES : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText.setStroke('#0000ff', 8);	
 		this.livesText = this.add.text(0, 48, 'TRIES : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.livesText.setStroke('#0000ff', 8);
 		//this.livesText.setShadow(2, 2, "#ffffff", 2, true, true);	
@@ -132,6 +134,8 @@ class FrogerScene extends Phaser.Scene {
 			{ 
 				this.bLeftKeyDown = true;
 				this.player.x -= this.playerSpeed;
+				this.score = this.score + 1;
+				this.scoreText.setText('MOVES : '+this.score);
 			}			
 		}
 		else
@@ -150,6 +154,8 @@ class FrogerScene extends Phaser.Scene {
 			{ 
 				this.bRightKeyDown = true;
 				this.player.x += this.playerSpeed;
+				this.score = this.score + 1;
+				this.scoreText.setText('MOVES : '+this.score);
 			}			
 		}
 		else
@@ -167,6 +173,8 @@ class FrogerScene extends Phaser.Scene {
 			{ 
 				this.bUpKeyDown = true;
 				this.player.y -= this.playerSpeed;
+				this.score = this.score + 1;
+				this.scoreText.setText('MOVES : '+this.score);
 			}			
 		}
 		else
@@ -184,6 +192,8 @@ class FrogerScene extends Phaser.Scene {
 			{ 
 				this.bDownKeyDown = true;
 				this.player.y += this.playerSpeed;
+				this.score = this.score + 1;
+				this.scoreText.setText('MOVES : '+this.score);
 			}			
 		}
 		else

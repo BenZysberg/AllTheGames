@@ -27,7 +27,8 @@ class SokobanScene extends Phaser.Scene {
 			gameSpeed: 100
 		}
         this.livesText;    
-		this.lives = 3; 				
+		this.lives = 3; 
+		this.score = 0;				
 	}
 
 	preload() {
@@ -52,6 +53,8 @@ class SokobanScene extends Phaser.Scene {
 		this.bUpKeyDown = false;
 		this.bDownKeyDown = false;
 		this.bRKeyDown = false;
+        this.scoreText = this.add.text(0, 0, 'MOVES : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+		this.scoreText.setStroke('#0000ff', 8);		
 		this.livesText = this.add.text(0, 48, 'TRIES : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.livesText.setStroke('#0000ff', 8);				
 	}
@@ -112,6 +115,8 @@ class SokobanScene extends Phaser.Scene {
     }
 	
     checkMove(deltaX, deltaY){
+		this.score = this.score + 1;
+		this.scoreText.setText('MOVES : '+this.score);		
         if(this.isWalkable(this.player.posX + deltaX, this.player.posY + deltaY)){
             this.movePlayer(deltaX, deltaY);
             return;
@@ -122,7 +127,7 @@ class SokobanScene extends Phaser.Scene {
                 this.movePlayer(deltaX, deltaY);
                 return;
             }
-        }
+		}
     }
 	
     isWalkable(posX, posY){
