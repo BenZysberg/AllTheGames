@@ -17,7 +17,8 @@ class BreakoutScene extends Phaser.Scene {
 		this.scoreText;
         this.livesText;    
         this.lives = 3;      
-		this.music;              
+        this.music;     
+        this.sfx;         
     }
 
     preload()
@@ -25,7 +26,7 @@ class BreakoutScene extends Phaser.Scene {
         this.load.atlas('assets', 'assets/breakout.png', 'assets/breakout.json');
 		this.count = 30;
         this.load.audio('music03', ['assets/03.mp3']);
-        this.load.audio('debug', ['assets/coin.wav']);
+        this.load.audio('debugCoin', ['assets/coin.wav']);
 		this.load.image('backgroundBreakout', 'assets/Sublime.png');
     }
 
@@ -37,6 +38,7 @@ class BreakoutScene extends Phaser.Scene {
 		this.music = this.sound.add('music03');
         this.music.play();		
         this.music.loop = true;	
+        this.sfx = this.sound.add('debugCoin');
         //  Enable world bounds, but disable the floor
         this.physics.world.setBoundsCollision(true, true, true, false);
 
@@ -89,6 +91,7 @@ class BreakoutScene extends Phaser.Scene {
 
     hitBrick(ball, brick)
     {
+        this.sfx.play();
         brick.disableBody(true, true);       
         this.count--;
 		this.scoreText.setText('BUGS : '+this.count)          

@@ -7,8 +7,8 @@ class MatchScene extends Phaser.Scene {
         this.orbColors = 6;
         this.orbSize = 100;
         this.swapSpeed = 200;
-        this.fallSpeed = 1000;
-        this.destroySpeed = 500;
+        this.fallSpeed = 200;
+        this.destroySpeed = 200;
         this.fastFall = true;
         this.gameArray = [];
         this.removeMap = [];
@@ -36,14 +36,14 @@ class MatchScene extends Phaser.Scene {
 	create(){
         this.music = this.sound.add('music06');
         this.music.play();
-        this.music.loop = true;
+        //this.music.loop = true;
         this.bg = this.add.sprite(0, 0, 'backgroundRobata');
         this.bg.setOrigin(0, 0);        
         this.drawField();
         this.canPick = true;
         this.input.on("pointerdown", function(pointer){this.orbSelect(pointer)}, this);
         this.input.on("pointerup", function(pointer){this.orbDeselect(pointer)}, this);
-        this.scoreText = this.add.text(720, 0, 'ALCOHOL : '+this.score+'G', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+        this.scoreText = this.add.text(720, 0, 'MONEY : $'+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
         this.scoreText.setStroke('#0000ff', 8);
         this.scoreText.depth = 9000;
         this.livesText = this.add.text(720, 48, 'STAMINA : 60', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
@@ -354,7 +354,7 @@ class MatchScene extends Phaser.Scene {
                         });
                         destroyed ++;
                         this.score = this.score + 1;
-                        this.scoreText.setText('ALCOHOL : '+ this.score+'G');
+                        this.scoreText.setText('MONEY : $'+this.score);
                         this.gameArray[i][j] = null;  
 
                         /*var destroyTween = this.add.tween(this.gameArray[i][j].orbSprite).to({
