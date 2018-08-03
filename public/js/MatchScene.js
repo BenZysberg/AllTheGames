@@ -15,6 +15,11 @@ class MatchScene extends Phaser.Scene {
         this.orbGroup;
         this.selectedOrb;
         this.canPick = true;
+		this.score = 0;
+		this.isPlayerAlive = true;
+		this.scoreText;
+		this.livesText;
+		this.lives = 100;          
     }
     
 	preload(){
@@ -22,13 +27,22 @@ class MatchScene extends Phaser.Scene {
 			frameWidth: this.orbSize,
 			frameHeight: this.orbSize
         });
+		this.load.image('backgroundRobata', 'assets/robata.jpg');	        
     }
     
 	create(){
-          this.drawField();
-          this.canPick = true;
-          this.input.on("pointerdown", function(pointer){this.orbSelect(pointer)}, this);
-          this.input.on("pointerup", function(pointer){this.orbDeselect(pointer)}, this);
+        this.bg = this.add.sprite(0, 0, 'backgroundRobata');
+        this.bg.setOrigin(0, 0);        
+        this.drawField();
+        this.canPick = true;
+        this.input.on("pointerdown", function(pointer){this.orbSelect(pointer)}, this);
+        this.input.on("pointerup", function(pointer){this.orbDeselect(pointer)}, this);
+        this.scoreText = this.add.text(720, 0, 'ALCOHOL : '+this.score+'G', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+        this.scoreText.setStroke('#0000ff', 8);
+        this.scoreText.depth = 9000;
+        this.livesText = this.add.text(720, 48, 'STAMINA : '+this.lives+'%', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+        this.livesText.setStroke('#0000ff', 8);
+        this.livesText.depth = 9000;      
 	}	
 
     drawField(){
@@ -53,36 +67,42 @@ class MatchScene extends Phaser.Scene {
 
     orbSelect(e){
         if(this.canPick){
-            console.log(e.x+" "+e.y);
-            var row = Math.floor(e.y / this.orbSize);
-            var col = Math.floor(e.x / this.orbSize);
-            console.log(row+" "+col);
-            var pickedOrb = this.gemAt(row, col)
-            if(pickedOrb != -1){
-                if(this.selectedOrb == null){
-                        pickedOrb.orbSprite.setScale(1.2);
-                        //pickedOrb.orbSprite.bringToTop();
-                        this.selectedOrb = pickedOrb;
-                        //this.input.addMoveCallback(this.orbMove);
-                }
-                else{
-                        if(this.areTheSame(pickedOrb, this.selectedOrb)){
-                            this.selectedOrb.orbSprite.setScale(1);
-                            this.selectedOrb = null;
-                        }
-                        else{     
-                            if(this.areNext(pickedOrb, this.selectedOrb)){
+            this.lives -= 4;
+            this.livesText.setText('STAMINA : '+ this.lives+'%');     
+            if(this.lives==0)
+                this.gameOver(true);  
+            else{             
+                console.log(e.x+" "+e.y);
+                var row = Math.floor(e.y / this.orbSize);
+                var col = Math.floor(e.x / this.orbSize);
+                console.log(row+" "+col);
+                var pickedOrb = this.gemAt(row, col)
+                if(pickedOrb != -1){
+                    if(this.selectedOrb == null){
+                            pickedOrb.orbSprite.setScale(1.2);
+                            //pickedOrb.orbSprite.bringToTop();
+                            this.selectedOrb = pickedOrb;
+                            //this.input.addMoveCallback(this.orbMove);
+                    }
+                    else{
+                            if(this.areTheSame(pickedOrb, this.selectedOrb)){
                                 this.selectedOrb.orbSprite.setScale(1);
-                                this.swapOrbs(this.selectedOrb, pickedOrb, true);                  
+                                this.selectedOrb = null;
                             }
-                            else{
-                                this.selectedOrb.orbSprite.setScale(1);
-                                pickedOrb.orbSprite.setScale(1.2); 
-                                this.selectedOrb = pickedOrb;  
-                                //this.input.addMoveCallback(this.orbMove);      
+                            else{     
+                                if(this.areNext(pickedOrb, this.selectedOrb)){
+                                    this.selectedOrb.orbSprite.setScale(1);
+                                    this.swapOrbs(this.selectedOrb, pickedOrb, true);                  
+                                }
+                                else{
+                                    this.selectedOrb.orbSprite.setScale(1);
+                                    pickedOrb.orbSprite.setScale(1.2); 
+                                    this.selectedOrb = pickedOrb;  
+                                    //this.input.addMoveCallback(this.orbMove);      
+                                }
                             }
-                        }
-                }     
+                    } 
+                }    
             }
         }
     }
@@ -329,6 +349,8 @@ class MatchScene extends Phaser.Scene {
                             }
                         });
                         destroyed ++;
+                        this.score = this.score + 1;
+                        this.scoreText.setText('ALCOHOL : '+ this.score+'G');
                         this.gameArray[i][j] = null;  
 
                         /*var destroyTween = this.add.tween(this.gameArray[i][j].orbSprite).to({
@@ -510,4 +532,33 @@ class MatchScene extends Phaser.Scene {
         }
         return result;     
     }
+
+    gameOver(bVictory) {
+		// flag to set player is dead
+		//this.isPlayerAlive = false;
+
+		// shake the camera
+		this.cameras.main.shake(500);
+
+		// fade camera
+		/*this.time.delayedCall(250, function() {
+			this.cameras.main.fade(250);
+        }, [], this);*/
+        victories[currentScene] = bVictory;
+        currentScene += 1;
+        let insScene = this.scene.get('InstructionsScene');
+        this.scene.setVisible(true, insScene);  
+        bInstructions = true;
+        insScene.nextScene();
+
+		this.time.delayedCall(transitionTime, function() {
+            this.scene.setVisible(false, insScene);
+            this.scene.switch(order[currentScene]);
+		}, [], this);
+
+		// reset camera effects
+		/*this.time.delayedCall(600, function() {
+			this.cameras.main.resetFX();
+		}, [], this);*/
+	}   
 }
