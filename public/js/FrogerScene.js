@@ -15,6 +15,7 @@ class FrogerScene extends Phaser.Scene {
 		this.lives = 3; 
 		this.isPlayerAlive = true;
 		this.score = 0;	
+		this.music;
 	}
 
 	init() {
@@ -24,6 +25,7 @@ class FrogerScene extends Phaser.Scene {
 	}
 
 	preload() {
+		this.load.audio('music05', ['assets/05.mp3']);	
 		this.load.image('backgroundFroger', 'assets/vip.jpg');
 		this.load.image('playerFroger', 'assets/player.png');
 		this.load.image('mazi', 'assets/MaziarFarzam.png');
@@ -34,7 +36,9 @@ class FrogerScene extends Phaser.Scene {
 	}
 
 	create() {
-
+		this.music = this.sound.add('music05');
+		this.music.play();
+		this.music.loop = true;
         this.input.on("pointerup", this.endSwipe, this);			
 		this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);	
 		this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);		
@@ -283,10 +287,12 @@ class FrogerScene extends Phaser.Scene {
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
-        bInstructions = true;
+		bInstructions = true;
+		this.music.stop();
         insScene.nextScene();
 
 		this.time.delayedCall(transitionTime, function() {
+			this.music.stop();
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);

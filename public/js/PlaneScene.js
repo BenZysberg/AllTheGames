@@ -20,12 +20,14 @@ class PlaneScene extends Phaser.Scene {
 		this.livesText;
 		this.distance = 0;
 		this.lives = 3;
+		this.music;
 	}
 	
 	preload() {
 		this.load.atlas('sheet', 'assets/sheet.png', 'assets/sheet.json');
 		this.load.image('pipe', 'assets/pipe.png');	
 		this.load.image('nissan', 'assets/Nissan.png');	
+		this.load.audio('music02', ['assets/02.mp3']);
     }
 	
 	create() {
@@ -38,7 +40,9 @@ class PlaneScene extends Phaser.Scene {
         });
 		
 		this.cursors = this.input.keyboard.createCursorKeys();
-
+		this.music = this.sound.add('music02');
+		this.music.play();	
+		this.music.loop = true;	
         this.bg = this.add.tileSprite(0, 0, 1920, 1080, 'sheet', 'background.png').setOrigin(0);
 		this.plane = this.physics.add.sprite(400, 300, 'nissan');
 		this.plane.body.gravity.y = 1000; 
@@ -150,10 +154,12 @@ class PlaneScene extends Phaser.Scene {
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
-        bInstructions = true;
+		bInstructions = true;
+		this.music.stop();
         insScene.nextScene();
 
 		this.time.delayedCall(transitionTime, function() {
+			this.music.stop();
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);

@@ -19,7 +19,9 @@ class MatchScene extends Phaser.Scene {
 		this.isPlayerAlive = true;
 		this.scoreText;
 		this.livesText;
-		this.lives = 100;          
+        this.lives = 100; 
+        this.music;
+        this.distance = 0;         
     }
     
 	preload(){
@@ -27,10 +29,14 @@ class MatchScene extends Phaser.Scene {
 			frameWidth: this.orbSize,
 			frameHeight: this.orbSize
         });
-		this.load.image('backgroundRobata', 'assets/robata.jpg');	        
+        this.load.image('backgroundRobata', 'assets/robata.jpg');	 
+        this.load.audio('music06', ['assets/06.mp3']);       
     }
     
 	create(){
+        this.music = this.sound.add('music06');
+        this.music.play();
+        this.music.loop = true;
         this.bg = this.add.sprite(0, 0, 'backgroundRobata');
         this.bg.setOrigin(0, 0);        
         this.drawField();
@@ -40,7 +46,7 @@ class MatchScene extends Phaser.Scene {
         this.scoreText = this.add.text(720, 0, 'ALCOHOL : '+this.score+'G', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
         this.scoreText.setStroke('#0000ff', 8);
         this.scoreText.depth = 9000;
-        this.livesText = this.add.text(720, 48, 'STAMINA : '+this.lives+'%', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
+        this.livesText = this.add.text(720, 48, 'STAMINA : 60', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
         this.livesText.setStroke('#0000ff', 8);
         this.livesText.depth = 9000;      
 	}	
@@ -66,9 +72,7 @@ class MatchScene extends Phaser.Scene {
     }
 
     orbSelect(e){
-        if(this.canPick){
-            this.lives -= 4;
-            this.livesText.setText('STAMINA : '+ this.lives+'%');     
+        if(this.canPick){ 
             if(this.lives==0)
                 this.gameOver(true);  
             else{             
@@ -549,9 +553,11 @@ class MatchScene extends Phaser.Scene {
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
         bInstructions = true;
+        this.music.stop();
         insScene.nextScene();
 
 		this.time.delayedCall(transitionTime, function() {
+            this.music.stop();
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);
@@ -560,5 +566,19 @@ class MatchScene extends Phaser.Scene {
 		/*this.time.delayedCall(600, function() {
 			this.cameras.main.resetFX();
 		}, [], this);*/
+    } 
+    
+    update(time, delta) {
+		if (!this.isPlayerAlive) {
+			return;
+		}
+		this.distance = this.distance + delta;
+        if(this.distance > 60000)
+        {
+            this.isPlayerAlive = false;
+            this.gameOver(true);
+        }
+		this.livesText.setText('STAMINA : '+(60-Math.ceil((this.distance)/1000)));			
 	}   
+
 }

@@ -29,10 +29,11 @@ class SokobanScene extends Phaser.Scene {
         this.livesText;    
 		this.lives = 3; 
 		this.score = 0;				
+        this.music;		
 	}
 
 	preload() {
-		console.log("CAR");		
+		this.load.audio('music04', ['assets/04.mp3']);	
         this.load.spritesheet("tilesSokoban", "assets/sokotiles.png", {
             frameWidth: this.gameOptions.tileSize,
             frameHeight: this.gameOptions.tileSize
@@ -40,6 +41,9 @@ class SokobanScene extends Phaser.Scene {
 	}
 
 	create() {
+		this.music = this.sound.add('music04');
+		this.music.play();
+		this.music.loop = true;
         this.crates = [];
         this.drawLevel();
         this.input.on("pointerup", this.endSwipe, this);	
@@ -170,10 +174,12 @@ class SokobanScene extends Phaser.Scene {
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
-        bInstructions = true;
+		bInstructions = true;
+		this.music.stop();
         insScene.nextScene();
 
 		this.time.delayedCall(transitionTime, function() {
+			this.music.stop();
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);

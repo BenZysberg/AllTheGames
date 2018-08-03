@@ -23,6 +23,7 @@ class StarScene extends Phaser.Scene {
 		this.livesText;
 		this.lives = 3;
 		this.level = 1;
+		this.music;		
 	}
 
 	preload() {
@@ -35,14 +36,17 @@ class StarScene extends Phaser.Scene {
 			frameWidth: 36,
 			frameHeight: 48
 		});
-		this.load.image('backgroundStar', 'assets/Soup.png');		
+		this.load.image('backgroundStar', 'assets/Soup.png');	
+		this.load.audio('music08', ['assets/08.mp3']); 			
 	}
 
 	create() {
 		//  A simple background for our game
 		this.bg = this.add.sprite(0, 0, 'backgroundStar');
 		this.bg.setOrigin(0, 0);
-
+		this.music = this.sound.add('music08');
+		this.music.play();	
+		this.music.loop = true;
 		//  The this.platforms group contains the ground and the 2 ledges we can jump on
 		this.platforms = this.physics.add.staticGroup();
 
@@ -254,10 +258,12 @@ class StarScene extends Phaser.Scene {
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
-        bInstructions = true;
+		bInstructions = true;
+		this.music.stop();
         insScene.nextScene();
 
 		this.time.delayedCall(transitionTime, function() {
+			this.music.stop();
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);

@@ -16,14 +16,16 @@ class BreakoutScene extends Phaser.Scene {
         this.ball;	
 		this.scoreText;
         this.livesText;    
-		this.lives = 3;            
+        this.lives = 3;      
+		this.music;              
     }
 
     preload()
     {
         this.load.atlas('assets', 'assets/breakout.png', 'assets/breakout.json');
 		this.count = 30;
-		
+        this.load.audio('music03', ['assets/03.mp3']);
+        this.load.audio('debug', ['assets/coin.wav']);
 		this.load.image('backgroundBreakout', 'assets/Sublime.png');
     }
 
@@ -32,7 +34,9 @@ class BreakoutScene extends Phaser.Scene {
 		
 		this.bg = this.add.sprite(0, 0, 'backgroundBreakout');
 		this.bg.setOrigin(0, 0);
-		
+		this.music = this.sound.add('music03');
+        this.music.play();		
+        this.music.loop = true;	
         //  Enable world bounds, but disable the floor
         this.physics.world.setBoundsCollision(true, true, true, false);
 
@@ -105,14 +109,16 @@ class BreakoutScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
+        this.music.stop();
         victories[currentScene] = bVictory;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
-        bInstructions = true;
+        bInstructions = true;     
         insScene.nextScene();
 
 		this.time.delayedCall(transitionTime, function() {
+            this.music.stop();
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);

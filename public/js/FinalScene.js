@@ -3,10 +3,12 @@ class FinalScene extends Phaser.Scene {
 		super({
 			key: 'FinalScene'
 		});
+		this.music;	
 	}
 
 	preload() {
 		this.load.image('backgroundFinal', 'assets/Final.jpg');
+		this.load.audio('musicFinal', ['assets/Final.mp3']); 			
 	}
 
 	create() {
@@ -18,6 +20,8 @@ class FinalScene extends Phaser.Scene {
 		this.scoreboardText = this.add.text(500, 326, 'THANKS FOR PLAYING!!', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreboardText.setStroke('#0000ff', 8);
 		this.firstRun = true;
+		this.music = this.sound.add('musicFinal');
+		this.music.play();
 	}
 
 	update(time, delta) {

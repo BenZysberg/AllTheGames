@@ -6,6 +6,9 @@ class InstructionsScene extends Phaser.Scene {
 		});
 		this.bgFail = [];
 		this.bgSuccess = [];
+		this.musicFail;
+		this.musicWin;
+		this.musicIntro;
 	}
 
 	preload() {
@@ -15,12 +18,16 @@ class InstructionsScene extends Phaser.Scene {
 		this.load.image('backgroundfailOne', 'assets/failOne.jpg');
 		this.load.image('backgroundFailTwo', 'assets/failTwo.jpg');
 		this.load.image('backgroundFailThree', 'assets/failThree.jpg');
+		this.load.audio('musicFail', ['assets/Fail.ogg']);
+		this.load.audio('musicWin', ['assets/Win.ogg']);
+		this.load.audio('musicIntro', ['assets/Intro.mp3']);
 	}
 
 	create() {
 		this.scene.setVisible(false);
-
-
+		this.musicFail = this.sound.add('musicFail');
+		this.musicWin = this.sound.add('musicWin');
+		this.musicIntro = this.sound.add('musicIntro');
 		this.bgSuccess[0] = this.add.sprite(0, 0, 'backgroundSuccessOne');
 		this.bgSuccess[1] = this.add.sprite(0, 0, 'backgroundSuccessTwo');
 		this.bgSuccess[2] = this.add.sprite(0, 0, 'backgroundSuccessThree');		
@@ -61,12 +68,18 @@ class InstructionsScene extends Phaser.Scene {
 			}
 
 				let current = Phaser.Math.Between(0, 2);
-				console.log(current);
+				if(victories[currentScene-1])
+					this.musicWin.play()
+				else
+					this.musicFail.play()
+
 				this.bgFail[current].setVisible(!victories[currentScene-1]);
 				this.failText.setVisible(!victories[currentScene-1]);
 				this.bgSuccess[current].setVisible(victories[currentScene-1]);
 				this.successText.setVisible(victories[currentScene-1]);
 		}
+		else
+			this.musicIntro.play();
 
 		this.roundText.setText(''+rounds[currentScene]);
 		this.titleText.setText(''+titles[currentScene]);

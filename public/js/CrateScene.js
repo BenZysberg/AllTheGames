@@ -22,7 +22,8 @@ class CrateScene extends Phaser.Scene {
 		this.newDifficultyTime = 0;
 		this.timing = 1125;
 		this.totalTime = 0;
-		this.survivalTime = 30;
+		this.survivalTime = 28;
+		this.music;
 	}
 
 	init(){
@@ -39,13 +40,15 @@ class CrateScene extends Phaser.Scene {
 			frameWidth: 36,
 			frameHeight: 48
 		});
-		this.load.image('backgroundCafe', 'assets/CafeBleu.jpg');			
+		this.load.image('backgroundCafe', 'assets/CafeBleu.jpg');
+		this.load.audio('music07', ['assets/07.mp3']);   			
     }
 
     // function to be executed once the scene has been created
     create(){
-
-	
+		this.music = this.sound.add('music07');
+		this.music.play();		
+		this.music.loop = true;
 		//  A simple background for our game
 		this.bg = this.add.sprite(0, 0, 'backgroundCafe');
 		this.bg.setOrigin(0, 0);
@@ -148,9 +151,11 @@ class CrateScene extends Phaser.Scene {
 			let insScene = this.scene.get('InstructionsScene');
 			this.scene.setVisible(true, insScene);  
 			bInstructions = true;
+			this.music.stop();
 			insScene.nextScene();
 
 			this.time.delayedCall(transitionTime, function() {
+				this.music.stop();
 				this.scene.setVisible(false, insScene);
 				this.scene.switch(order[currentScene]);
 			}, [], this);
@@ -187,7 +192,7 @@ class CrateScene extends Phaser.Scene {
 		
 		this.newCrateTime = this.newCrateTime + delta;
 		this.totalTime = this.totalTime + delta;
-		this.scoreText.setText('NEXT UBER IN : '+Math.ceil((30000 - this.totalTime)/1000));
+		this.scoreText.setText('NEXT UBER IN : '+Math.ceil((28000 - this.totalTime)/1000));
 		if(this.newCrateTime > this.timing )
 		{
 			this.addCrate();
@@ -200,7 +205,7 @@ class CrateScene extends Phaser.Scene {
 			this.newDifficultyTime = 0;
 		}
 		
-		if(this.totalTime > 30000)
+		if(this.totalTime > 28000)
 			this.gameOver(true);
 	}
 }

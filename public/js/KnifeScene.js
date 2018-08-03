@@ -8,7 +8,8 @@ class KnifeScene extends Phaser.Scene {
 		this.isPlayerAlive = true;
 		this.scoreText;
 		this.livesText;
-		this.lives = 10;	
+        this.lives = 10;	
+        this.music;
 		this.gameOptions = {
 
             // target rotation speed, in degrees per frame
@@ -42,12 +43,16 @@ class KnifeScene extends Phaser.Scene {
             frameHeight: 96
         });
         this.load.image('backgroundKitchen', 'assets/cuisine.jpg');
+		this.load.audio('music01', ['assets/01.mp3']);        
     }   
 
      // method to be executed once the scene has been created
      create(){
 		this.bg = this.add.sprite(0, 0, 'backgroundKitchen');
-		this.bg.setOrigin(0, 0);	
+        this.bg.setOrigin(0, 0);	
+		this.music = this.sound.add('music01');
+        this.music.play();	
+        this.music.loop = true;        
         // at the beginning of the game, both current rotation speed and new rotation speed are set to default rotation speed
         this.currentRotationSpeed = this.gameOptions.rotationSpeed;
         this.newRotationSpeed = this.gameOptions.rotationSpeed;
@@ -337,9 +342,11 @@ class KnifeScene extends Phaser.Scene {
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
         bInstructions = true;
+        this.music.stop();
         insScene.nextScene();
 
 		this.time.delayedCall(transitionTime, function() {
+            this.music.stop();
             this.scene.setVisible(false, insScene);
             this.scene.switch(order[currentScene]);
 		}, [], this);

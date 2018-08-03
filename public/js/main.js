@@ -26,7 +26,7 @@ let config = {
 };
 
 var game = new Phaser.Game(config);
-var instructions = ["USE: CLICK", "USE: UP ARROW", "USE: TOUCHPAD","USE: ARROWS / R TO RETRY","USE: ARROWS","USE: ARROWS","USE: ARROWS","USE: ARROWS",""];
+var instructions = ["USE: CLICK", "USE: UP ARROW", "USE: TOUCHPAD","USE: ARROWS / R TO RETRY","USE: ARROWS","USE: TOUCHPAD","USE: ARROWS","USE: ARROWS",""];
 var titles = ["MAKE SNACKS!!", "DRIVE DESTINY!!", "FIX THE CSS!!", "PUSH CODE!!", "HEAD OUT!!", "DRINKING GAME!!", "DON'T SMOKE!!", "STAY VEGAN!!",""];
 var rounds = ["NEXT: ROUND 1", "NEXT: ROUND 2", "NEXT: ROUND 3", "NEXT: ROUND 4", "NEXT: ROUND 5", "NEXT: BONUS ROUND", "NEXT: ROUND 6", "NEXT: FINAL ROUND",""];
 var order = ["KnifeScene","PlaneScene","BreakoutScene","SokobanScene","FrogerScene","MatchScene","CrateScene","StarScene","FinalScene"];

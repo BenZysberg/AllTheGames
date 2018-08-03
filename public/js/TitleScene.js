@@ -3,10 +3,12 @@ class TitleScene extends Phaser.Scene {
 		super({
 			key: 'TitleScene'
 		});
+		this.music;
 	}
 	preload() {
 		this.load.image('backgroundTitle', 'assets/title.jpg');
 		this.load.image('teresaSolo', 'assets/TeresaSolo.png');
+		this.load.audio('musicTitle', ['assets/Title.mp3']);
 	}
 	create() {
 		this.bgTitle = this.add.sprite(0, 0, 'backgroundTitle');
@@ -15,11 +17,15 @@ class TitleScene extends Phaser.Scene {
 		this.startText = this.add.text(500, 300, 'PRESS T TO START', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#000000" });						
 		this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 		this.bStartKeyDown = false;	
+		this.music = this.sound.add('musicTitle');
+		this.music.play();
+		this.music.loop = true;
 	}
 	update(time, delta) {
 		if(!this.bStartKeyDown)
 		{
 			if (this.startKey.isDown) {
+				this.music.stop();
 				this.bStartKeyDown = true;
 				//this.scene.stop('TitleScene');
 				//this.registry.set('attractMode', false);
@@ -28,6 +34,7 @@ class TitleScene extends Phaser.Scene {
 				bInstructions = true;
 				insScene.nextScene();		
 				this.time.delayedCall(transitionTime, function() {
+					this.music.stop();
 					this.scene.setVisible(false, insScene);
 					this.scene.switch(order[currentScene]);
 				}, [], this);
