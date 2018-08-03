@@ -11,7 +11,7 @@ class BreakoutScene extends Phaser.Scene {
 				},
 			}			
 		});
-		        this.bricks;
+		this.bricks;
         this.paddle;
         this.ball;	
 		this.scoreText;
