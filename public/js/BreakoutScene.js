@@ -114,6 +114,7 @@ class BreakoutScene extends Phaser.Scene {
         }, [], this);*/
         this.music.stop();
         victories[currentScene] = bVictory;
+        score[currentScene] = this.lives * 10 + (30-this.count)*15;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  

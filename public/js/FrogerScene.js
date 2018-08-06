@@ -33,6 +33,7 @@ class FrogerScene extends Phaser.Scene {
 		this.load.image('ari', 'assets/AriKaplan.png');
 		this.load.image('penn', 'assets/PennArthur.png');
 		this.load.image('treasure', 'assets/Door.jpg');
+		this.load.audio('springJump', ['assets/springJump.wav']); 
 	}
 
 	create() {
@@ -48,7 +49,7 @@ class FrogerScene extends Phaser.Scene {
 		this.bRightKeyDown = false;
 		this.bUpKeyDown = false;
 		this.bDownKeyDown = false;	
-		//this.scene.bringToTop();
+        this.sfx = this.sound.add('springJump');
 		// backgroundFroger
 		this.bg = this.add.sprite(0, 0, 'backgroundFroger');
 		//this.bg.setScale(0.5);
@@ -140,6 +141,7 @@ class FrogerScene extends Phaser.Scene {
 				this.player.x -= this.playerSpeed;
 				this.score = this.score + 1;
 				this.scoreText.setText('MOVES : '+this.score);
+				this.sfx.play();
 			}			
 		}
 		else
@@ -160,6 +162,7 @@ class FrogerScene extends Phaser.Scene {
 				this.player.x += this.playerSpeed;
 				this.score = this.score + 1;
 				this.scoreText.setText('MOVES : '+this.score);
+				this.sfx.play();
 			}			
 		}
 		else
@@ -179,6 +182,7 @@ class FrogerScene extends Phaser.Scene {
 				this.player.y -= this.playerSpeed;
 				this.score = this.score + 1;
 				this.scoreText.setText('MOVES : '+this.score);
+				this.sfx.play();
 			}			
 		}
 		else
@@ -198,6 +202,7 @@ class FrogerScene extends Phaser.Scene {
 				this.player.y += this.playerSpeed;
 				this.score = this.score + 1;
 				this.scoreText.setText('MOVES : '+this.score);
+				this.sfx.play();
 			}			
 		}
 		else
@@ -283,7 +288,8 @@ class FrogerScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-        victories[currentScene] = bVictory;
+		victories[currentScene] = bVictory;
+		score[currentScene] = this.lives * 500 - this.score*10;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  

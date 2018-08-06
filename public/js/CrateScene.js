@@ -41,7 +41,8 @@ class CrateScene extends Phaser.Scene {
 			frameHeight: 48
 		});
 		this.load.image('backgroundCafe', 'assets/CafeBleu.jpg');
-		this.load.audio('music07', ['assets/07.mp3']);   			
+		this.load.audio('music07', ['assets/07.mp3']);   
+		this.load.audio('fireRain', ['assets/fireRain.wav']); 					
     }
 
     // function to be executed once the scene has been created
@@ -49,6 +50,7 @@ class CrateScene extends Phaser.Scene {
 		this.music = this.sound.add('music07');
 		this.music.play();		
 		this.music.loop = true;
+        this.sfx = this.sound.add('fireRain');		
 		//  A simple background for our game
 		this.bg = this.add.sprite(0, 0, 'backgroundCafe');
 		this.bg.setOrigin(0, 0);
@@ -147,6 +149,7 @@ class CrateScene extends Phaser.Scene {
 				this.cameras.main.fade(250);
 			}, [], this);*/
 			victories[currentScene] = bVictory;
+			score[currentScene] = Math.ceil((this.totalTime)/1000) * 50;
 			currentScene += 1;
 			let insScene = this.scene.get('InstructionsScene');
 			this.scene.setVisible(true, insScene);  
@@ -196,6 +199,7 @@ class CrateScene extends Phaser.Scene {
 		if(this.newCrateTime > this.timing )
 		{
 			this.addCrate();
+			this.sfx.play();
 			this.newCrateTime = 0;
 		}
 		this.newDifficultyTime = this.newDifficultyTime + delta;

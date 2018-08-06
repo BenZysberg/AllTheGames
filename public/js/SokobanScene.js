@@ -37,13 +37,15 @@ class SokobanScene extends Phaser.Scene {
         this.load.spritesheet("tilesSokoban", "assets/sokotiles.png", {
             frameWidth: this.gameOptions.tileSize,
             frameHeight: this.gameOptions.tileSize
-        });		
+		});		
+		this.load.audio('keyboardType', ['assets/keyboard.mp3']);
 	}
 
 	create() {
 		this.music = this.sound.add('music04');
 		this.music.play();
 		this.music.loop = true;
+		this.sfx = this.sound.add('keyboardType');
         this.crates = [];
         this.drawLevel();
         this.input.on("pointerup", this.endSwipe, this);	
@@ -170,7 +172,8 @@ class SokobanScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-        victories[currentScene] = bVictory;
+		victories[currentScene] = bVictory;
+		score[currentScene] = this.lives * 500 - this.score*10;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
@@ -261,6 +264,7 @@ class SokobanScene extends Phaser.Scene {
 			if (this.resetKey.isDown) {
 				this.reset();
 				this.bRKeyDown = true;
+				this.sfx.play();
 			}
 		}	
 		else
@@ -277,7 +281,7 @@ class SokobanScene extends Phaser.Scene {
 			{ 
 				this.bLeftKeyDown = true;
 				this.checkMove(-1, 0);
-				console.log("LEFT");
+				this.sfx.play();
 			}			
 		}
 		else
@@ -296,7 +300,7 @@ class SokobanScene extends Phaser.Scene {
 			{ 
 				this.bRightKeyDown = true;
 				this.checkMove(1, 0);
-				console.log("RIGHT");
+				this.sfx.play();
 			}			
 		}
 		else
@@ -314,7 +318,7 @@ class SokobanScene extends Phaser.Scene {
 			{ 
 				this.bUpKeyDown = true;
 				this.checkMove(0, -1);
-				console.log("UP");
+				this.sfx.play();
 			}			
 		}
 		else
@@ -332,7 +336,7 @@ class SokobanScene extends Phaser.Scene {
 			{ 
 				this.bDownKeyDown = true;
 				this.checkMove(0, 1);
-				console.log("DOWN");
+				this.sfx.play();
 			}			
 		}
 		else

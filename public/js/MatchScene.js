@@ -30,13 +30,14 @@ class MatchScene extends Phaser.Scene {
 			frameHeight: this.orbSize
         });
         this.load.image('backgroundRobata', 'assets/robata.jpg');	 
-        this.load.audio('music06', ['assets/06.mp3']);       
+        this.load.audio('music06', ['assets/06.mp3']); 
+        this.load.audio('cash', ['assets/cash.wav']);      
     }
     
 	create(){
         this.music = this.sound.add('music06');
         this.music.play();
-        //this.music.loop = true;
+        this.sfx = this.sound.add('cash');
         this.bg = this.add.sprite(0, 0, 'backgroundRobata');
         this.bg.setOrigin(0, 0);        
         this.drawField();
@@ -294,6 +295,7 @@ class MatchScene extends Phaser.Scene {
                 if(this.gemAt(j, i).orbColor != currentColor || j == this.fieldSize - 1){
                         if(colorStreak >= 3){
                             console.log("VERTICAL :: Length = "+colorStreak + " :: Start = ("+startStreak+","+i+") :: Color = "+currentColor);
+                            this.sfx.play();
                             for(var k = 0; k < colorStreak; k++){
                                 this.removeMap[startStreak + k][i] ++;
                             }
@@ -318,6 +320,7 @@ class MatchScene extends Phaser.Scene {
                 if(this.gemAt(i, j).orbColor != currentColor || j == this.fieldSize - 1){
                         if(colorStreak >= 3){
                             console.log("HORIZONTAL :: Length = "+colorStreak + " :: Start = ("+i+","+startStreak+") :: Color = "+currentColor);
+                            this.sfx.play();
                             for(var k = 0; k < colorStreak; k++){
                                 this.removeMap[i][startStreak + k] ++;
                             }
@@ -549,6 +552,7 @@ class MatchScene extends Phaser.Scene {
 			this.cameras.main.fade(250);
         }, [], this);*/
         victories[currentScene] = bVictory;
+        score[currentScene] = this.score*100;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  

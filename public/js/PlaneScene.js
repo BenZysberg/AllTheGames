@@ -28,6 +28,7 @@ class PlaneScene extends Phaser.Scene {
 		this.load.image('pipe', 'assets/pipe.png');	
 		this.load.image('nissan', 'assets/Nissan.png');	
 		this.load.audio('music02', ['assets/02.mp3']);
+		this.load.audio('jump', ['assets/jump.wav']);	
     }
 	
 	create() {
@@ -43,7 +44,8 @@ class PlaneScene extends Phaser.Scene {
 		this.music = this.sound.add('music02');
 		this.music.play();	
 		this.music.loop = true;	
-        this.bg = this.add.tileSprite(0, 0, 1920, 1080, 'sheet', 'background.png').setOrigin(0);
+		this.bg = this.add.tileSprite(0, 0, 1920, 1080, 'sheet', 'background.png').setOrigin(0);
+		this.sfx = this.sound.add('jump');		
 		this.plane = this.physics.add.sprite(400, 300, 'nissan');
 		this.plane.body.gravity.y = 1000; 
 
@@ -63,6 +65,7 @@ class PlaneScene extends Phaser.Scene {
 
 		if (this.cursors.up.isDown) {
 			this.plane.setVelocityY(-200);	
+			this.sfx.play();
 		}	
 
 
@@ -150,7 +153,8 @@ class PlaneScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-        victories[currentScene] = bVictory;
+		victories[currentScene] = bVictory;
+		score[currentScene] = Math.ceil((this.distance)/1000) * 25 + this.lives*10;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  

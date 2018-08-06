@@ -37,7 +37,8 @@ class StarScene extends Phaser.Scene {
 			frameHeight: 48
 		});
 		this.load.image('backgroundStar', 'assets/Soup.png');	
-		this.load.audio('music08', ['assets/08.mp3']); 			
+		this.load.audio('music08', ['assets/08.mp3']); 
+		this.load.audio('yoshiSwallow', ['assets/yoshiSwallow.wav']);			
 	}
 
 	create() {
@@ -47,6 +48,7 @@ class StarScene extends Phaser.Scene {
 		this.music = this.sound.add('music08');
 		this.music.play();	
 		this.music.loop = true;
+		this.sfx = this.sound.add('yoshiSwallow');
 		//  The this.platforms group contains the ground and the 2 ledges we can jump on
 		this.platforms = this.physics.add.staticGroup();
 
@@ -178,7 +180,7 @@ class StarScene extends Phaser.Scene {
 
 	collectStar(player, star) {
 		star.disableBody(true, true);
-
+		this.sfx.play();
 		//  Add and update the this.score
 		this.score += 1;
 		this.scoreText.setText('FULL : ' + (Math.ceil((this.score/30)*100)+'%'));
@@ -254,7 +256,8 @@ class StarScene extends Phaser.Scene {
 		/*this.time.delayedCall(250, function() {
 			this.cameras.main.fade(250);
         }, [], this);*/
-        victories[currentScene] = bVictory;
+		victories[currentScene] = bVictory;
+		score[currentScene] = this.lives * 10 + this.score*15;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  

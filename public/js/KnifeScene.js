@@ -10,6 +10,7 @@ class KnifeScene extends Phaser.Scene {
 		this.livesText;
         this.lives = 10;	
         this.music;
+        this.scoreToPass = 0;
 		this.gameOptions = {
 
             // target rotation speed, in degrees per frame
@@ -43,7 +44,8 @@ class KnifeScene extends Phaser.Scene {
             frameHeight: 96
         });
         this.load.image('backgroundKitchen', 'assets/cuisine.jpg');
-		this.load.audio('music01', ['assets/01.mp3']);        
+        this.load.audio('music01', ['assets/01.mp3']);        
+        this.load.audio('knifeThrow', ['assets/knifeThrow.wav']);	
     }   
 
      // method to be executed once the scene has been created
@@ -53,6 +55,7 @@ class KnifeScene extends Phaser.Scene {
 		this.music = this.sound.add('music01');
         this.music.play();	
         this.music.loop = true;        
+        this.sfx = this.sound.add('knifeThrow');
         // at the beginning of the game, both current rotation speed and new rotation speed are set to default rotation speed
         this.currentRotationSpeed = this.gameOptions.rotationSpeed;
         this.newRotationSpeed = this.gameOptions.rotationSpeed;
@@ -135,7 +138,7 @@ class KnifeScene extends Phaser.Scene {
 
         // can the player throw?
         if(this.canThrow){
-
+            this.sfx.play();
             // player can't throw anymore
             this.canThrow = false;
 
@@ -321,6 +324,7 @@ class KnifeScene extends Phaser.Scene {
         this.scoreText.setText('APPLES LEFT : '+ this.score);
         this.lives = 10;
         this.livesText.setText('KNIVES : '+this.lives);    
+        this.scoreToPass = this.scoreToPass + this.currentRotationSpeed * 100;
         this.currentRotationSpeed = (this.currentRotationSpeed) * -1.5;
         if(this.score == 0)
             this.gameOver(true);
@@ -338,6 +342,7 @@ class KnifeScene extends Phaser.Scene {
 			this.cameras.main.fade(250);
         }, [], this);*/
         victories[currentScene] = bVictory;
+        score[currentScene] = this.lives*10 + this.scoreToPass;
         currentScene += 1;
         let insScene = this.scene.get('InstructionsScene');
         this.scene.setVisible(true, insScene);  
