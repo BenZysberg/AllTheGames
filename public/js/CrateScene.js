@@ -95,7 +95,8 @@ class CrateScene extends Phaser.Scene {
 
 		//  Input Events
 		this.cursors = this.input.keyboard.createCursorKeys();
-		
+        this.skipKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.bSkip = true;		
         // setting Matter world bounds
         //this.matter.world.setBounds(0, -200, game.config.width, game.config.height + 200);
 
@@ -174,6 +175,16 @@ class CrateScene extends Phaser.Scene {
 		if (!this.isPlayerAlive) {
 			return;
 		}
+
+		if(this.bSkip)
+		{
+			if (this.skipKey.isDown) {
+				this.bSkip = false;
+                //this.isPlayerAlive = false;
+                this.gameOver(true);
+			}
+		}		
+
 
 		if (this.cursors.left.isDown) {
 			this.player.setVelocityX(-160);

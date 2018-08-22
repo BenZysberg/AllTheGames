@@ -59,7 +59,8 @@ class KnifeScene extends Phaser.Scene {
         // at the beginning of the game, both current rotation speed and new rotation speed are set to default rotation speed
         this.currentRotationSpeed = this.gameOptions.rotationSpeed;
         this.newRotationSpeed = this.gameOptions.rotationSpeed;
-
+        this.skipKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.bSkip = true;
         // can the player throw a knife? Yes, at the beginning of the game
         this.canThrow = true;
 
@@ -398,6 +399,15 @@ class KnifeScene extends Phaser.Scene {
             this.apple.x = this.target.x + (this.target.width / 2) * Math.cos(radians);
             this.apple.y = this.target.y + (this.target.width / 2) * Math.sin(radians);
         }
+
+		if(this.bSkip)
+		{
+			if (this.skipKey.isDown) {
+				this.bSkip = false;
+                this.isPlayerAlive = false;
+                this.gameOver(true);
+			}
+		}
 
         // adjusting current rotation speed using linear interpolation
         //this.currentRotationSpeed = Phaser.Math.Linear(this.currentRotationSpeed, this.newRotationSpeed, delta / 1000);

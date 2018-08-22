@@ -62,7 +62,9 @@ class SokobanScene extends Phaser.Scene {
         this.scoreText = this.add.text(0, 0, 'MOVES : '+this.score, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
 		this.scoreText.setStroke('#0000ff', 8);		
 		this.livesText = this.add.text(0, 48, 'TRIES : '+this.lives, { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
-		this.livesText.setStroke('#0000ff', 8);				
+		this.livesText.setStroke('#0000ff', 8);		
+        this.skipKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.bSkip = true;				
 	}
 	
     drawLevel(){
@@ -344,6 +346,15 @@ class SokobanScene extends Phaser.Scene {
 			if(this.downKey.isUp)
 			{ 
 				this.bDownKeyDown = false;
+			}
+		}
+		
+		if(this.bSkip)
+		{
+			if (this.skipKey.isDown) {
+				this.bSkip = false;
+                this.isPlayerAlive = false;
+                this.gameOver(true);
 			}
 		}		
 	}

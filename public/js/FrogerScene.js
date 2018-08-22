@@ -56,7 +56,8 @@ class FrogerScene extends Phaser.Scene {
 
 		// change origin to the top-left of the sprite
 		this.bg.setOrigin(0, 0);
-
+        this.skipKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.bSkip = true;
 		// player
 		this.player = this.physics.add.sprite(41, this.sys.game.config.height / 2, 'playerFroger');
 
@@ -132,6 +133,15 @@ class FrogerScene extends Phaser.Scene {
 		if (!this.isPlayerAlive) {
 			return;
 		}
+
+		if(this.bSkip)
+		{
+			if (this.skipKey.isDown) {
+				this.bSkip = false;
+                this.isPlayerAlive = false;
+                this.gameOver(true);
+			}
+		}		
 		
 		if (!this.bLeftKeyDown)
 		{

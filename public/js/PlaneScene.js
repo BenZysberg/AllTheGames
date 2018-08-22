@@ -39,7 +39,8 @@ class PlaneScene extends Phaser.Scene {
             frameRate: 10,
             frames: this.anims.generateFrameNames('sheet', { start: 1,  end: 3, prefix: 'planeBlue', suffix: '.png' })
         });
-		
+        this.skipKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.bSkip = true;		
 		this.cursors = this.input.keyboard.createCursorKeys();
 		this.music = this.sound.add('music02');
 		this.music.play();	
@@ -68,6 +69,14 @@ class PlaneScene extends Phaser.Scene {
 			this.sfx.play();
 		}	
 
+		if(this.bSkip)
+		{
+			if (this.skipKey.isDown) {
+				this.bSkip = false;
+                this.isPlayerAlive = false;
+                this.gameOver(true);
+			}
+		}		
 
 		this.plane.y = Phaser.Math.Clamp(this.plane.y, 80, 640);	
 		this.newCrateTime = this.newCrateTime + delta;
@@ -144,7 +153,7 @@ class PlaneScene extends Phaser.Scene {
 	
     gameOver(bVictory) {
 		// flag to set player is dead
-		//this.isPlayerAlive = false;
+		this.isPlayerAlive = false;
 
 		// shake the camera
 		this.cameras.main.shake(500);

@@ -57,7 +57,8 @@ class BreakoutScene extends Phaser.Scene {
         //  Our colliders
         this.physics.add.collider(this.ball, this.bricks, this.hitBrick, null, this);
         this.physics.add.collider(this.ball, this.paddle, this.hitPaddle, null, this);
-
+        this.skipKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.bSkip = true;
         //  Input events
         this.input.on('pointermove', function (pointer) {
 
@@ -185,6 +186,16 @@ class BreakoutScene extends Phaser.Scene {
         {
             this.resetBall();
         }
+
+        if(this.bSkip)
+		{
+			if (this.skipKey.isDown) {
+				this.bSkip = false;
+                this.isPlayerAlive = false;
+                this.gameOver(true);
+			}
+		}
+
     }
 
 }

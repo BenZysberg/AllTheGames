@@ -49,7 +49,9 @@ class MatchScene extends Phaser.Scene {
         this.scoreText.depth = 9000;
         this.livesText = this.add.text(720, 48, 'STAMINA : 60', { fontFamily: "Nintendo NES Font", fontSize: 32, color: "#ff0000" });
         this.livesText.setStroke('#0000ff', 8);
-        this.livesText.depth = 9000;      
+        this.livesText.depth = 9000; 
+        this.skipKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.bSkip = true;     
 	}	
 
     drawField(){
@@ -575,7 +577,17 @@ class MatchScene extends Phaser.Scene {
     update(time, delta) {
 		if (!this.isPlayerAlive) {
 			return;
-		}
+        }
+       
+		if(this.bSkip)
+		{
+			if (this.skipKey.isDown) {
+				this.bSkip = false;
+                this.isPlayerAlive = false;
+                this.gameOver(true);
+			}
+		}        
+
 		this.distance = this.distance + delta;
         if(this.distance > 60000)
         {
