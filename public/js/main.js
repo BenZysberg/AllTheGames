@@ -32,7 +32,7 @@ var rounds = ["NEXT: ROUND 1", "NEXT: ROUND 2", "NEXT: ROUND 3", "NEXT: ROUND 4"
 var order = ["KnifeScene","PlaneScene","BreakoutScene","SokobanScene","FrogerScene","MatchScene","CrateScene","StarScene","FinalScene"];
 var victories = [false, false, false, false, false, false, false, false, false];
 var score = [0,0,0,0,0,0,0,0,0];
-var currentScene = 6;
+var currentScene = 0;
 var bInstructions = false;
 var transitionTime = 5000;
 
