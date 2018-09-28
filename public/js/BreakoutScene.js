@@ -103,6 +103,7 @@ class BreakoutScene extends Phaser.Scene {
     }
 
     gameOver(bVictory) {
+        this.resetBall();
 		// flag to set player is dead
 		//this.isPlayerAlive = false;
 
