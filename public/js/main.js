@@ -3,8 +3,8 @@ let config = {
 	parent: 'content',
 	width: 1280, //1280
 	height: 720, //720
-	scaleMode: 0,
 	pixelart: true,
+	resolution: 1,
 	zoom: document.body.clientWidth / 1280,
 	scene: [
 		BootScene,
